@@ -47,6 +47,9 @@ Flutter application. It is built on top of [google_mlkit] and runs solely on-dev
 This package uses the Flutter [Camera] plugin to access the device camera.
 Make sure to follow their installation instructions.
 
+Futhermore, follow the instructions on [google_mlkit_barcode_scanning] and [google_mlkit_text_recognition] for
+proper setup. Specifically, setup the minimum iOS and Android SDKs and the Podfile.
+
 #### In Code Usage
 
 After importing the library, you can add a `DataScanner` to your widget tree.
@@ -342,3 +345,5 @@ See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 [UIC number]: https://en.wikipedia.org/wiki/UIC_wagon_numbers
 [GS1 codes]: https://en.wikipedia.org/wiki/GS1#Barcodes
 [google_mlkit]: https://developers.google.com/ml-kit
+[google_mlkit_text_recognition]: https://pub.dev/packages/google_mlkit_text_recognition
+[google_mlkit_barcode_scanning]: https://pub.dev/packages/google_mlkit_barcode_scanning
