@@ -1,0 +1,34 @@
+name: example
+description: Demonstrates how to use the sbb_data_scanner plugin.
+publish_to: 'none'
+version: 1.0.0+1
+
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  sbb_data_scanner:
+    path: ../
+
+  # https://github.com/SchweizerischeBundesbahnen/design_system_flutter
+  design_system_flutter:
+    git:
+      url: https://github.com/SchweizerischeBundesbahnen/design_system_flutter.git
+      ref: 2.0.0
+
+  # https://pub.dev/packages/cupertino_icons
+  cupertino_icons: ^1.0.8
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+  uses-material-design: true
