@@ -30,8 +30,7 @@ void main() {
         test(
           'should correctly validate [${testValue['testValue']}]',
           () async {
-            final result = service.validate(
-                testValue['testValue'] as String, GS1Type.giai);
+            final result = service.validate(testValue['testValue'] as String, GS1Type.giai);
             expect(result, testValue['expected']);
           },
         );

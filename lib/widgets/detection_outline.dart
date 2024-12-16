@@ -184,9 +184,8 @@ class _DetectionOutlinePainter extends CustomPainter {
     boundingBoxes.forEach((rect, value) {
       final paddedRect = rect.inflate(outlineConfig.padding);
 
-      _paint.color = _isInDetectionArea(paddedRect)
-          ? outlineConfig.activeOutlineColor
-          : outlineConfig.inactiveOutlineColor;
+      _paint.color =
+          _isInDetectionArea(paddedRect) ? outlineConfig.activeOutlineColor : outlineConfig.inactiveOutlineColor;
 
       final roundedRect = RRect.fromRectAndRadius(
         paddedRect,

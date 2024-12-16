@@ -2,6 +2,7 @@ import 'package:sbb_data_scanner/interfaces/extractor.dart';
 import 'package:sbb_data_scanner/models/gs1_details.dart';
 import 'package:sbb_data_scanner/services/gs1_details_service.dart';
 import 'package:sbb_data_scanner/services/gs1_validation_service.dart';
+
 enum GS1Type { giai, unknown }
 
 /// Extracts details of GS1 codes.

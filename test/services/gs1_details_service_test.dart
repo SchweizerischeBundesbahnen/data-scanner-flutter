@@ -15,16 +15,9 @@ void main() {
       test(
         'should return [] for gs1 codes with unknown type',
         () async {
-          final testValues = [
-            '(9999)761329948010399',
-            '9999761329948010399',
-            '123',
-            'ABCDEF',
-            ''
-          ];
+          final testValues = ['(9999)761329948010399', '9999761329948010399', '123', 'ABCDEF', ''];
 
-          testValues.forEach((testValue) =>
-              expect(service.extractGS1Values(testValue, GS1Type.unknown), []));
+          testValues.forEach((testValue) => expect(service.extractGS1Values(testValue, GS1Type.unknown), []));
         },
       );
 

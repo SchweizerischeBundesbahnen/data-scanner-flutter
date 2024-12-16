@@ -26,10 +26,14 @@ class LocalizedString {
   /// no language matches [context].
   String of(BuildContext context) {
     switch (Localizations.localeOf(context).languageCode) {
-      case 'de': return this.de;
-      case 'fr': return this.fr;
-      case 'it': return this.it;
-      default: return this.de;
+      case 'de':
+        return this.de;
+      case 'fr':
+        return this.fr;
+      case 'it':
+        return this.it;
+      default:
+        return this.de;
     }
   }
 

@@ -36,12 +36,9 @@ class _MainPageState extends State<MainPage> {
 
   bool _scannerActive = false;
 
-  final TextRecognitionVisionProcessor _textRecognitionProcessor =
-      TextRecognitionVisionProcessor();
-  final TwoDimensionalBarcodeVisionProcessor _twoDimensionalBarcodeProcessor =
-      TwoDimensionalBarcodeVisionProcessor();
-  final OneDimensionalBarcodeVisionProcessor _oneDimensionalBarcodeProcessor =
-      OneDimensionalBarcodeVisionProcessor();
+  final TextRecognitionVisionProcessor _textRecognitionProcessor = TextRecognitionVisionProcessor();
+  final TwoDimensionalBarcodeVisionProcessor _twoDimensionalBarcodeProcessor = TwoDimensionalBarcodeVisionProcessor();
+  final OneDimensionalBarcodeVisionProcessor _oneDimensionalBarcodeProcessor = OneDimensionalBarcodeVisionProcessor();
 
   final _rawTextExtractor = RawTextExtractor();
   final _uicDetailsStrictExtractor = UICDetailsExtractor(
@@ -179,15 +176,12 @@ class _MainPageState extends State<MainPage> {
         value: _detectText,
         label: 'Enable text recognition',
         secondaryLabel: 'Will detect text in the Latin script.',
-        onChanged: _scannerActive
-            ? null
-            : (enabled) => setState(() => _detectText = enabled!),
+        onChanged: _scannerActive ? null : (enabled) => setState(() => _detectText = enabled!),
       ),
       SBBCheckboxListItem(
         value: _detectOneDimensionalBarcodes,
         label: 'Enable 1-D barcode scanning',
-        secondaryLabel:
-            'Will detect one-dimensional barcodes, such as you would scan in the store.',
+        secondaryLabel: 'Will detect one-dimensional barcodes, such as you would scan in the store.',
         onChanged: _scannerActive
             ? null
             : (enabled) => setState(
@@ -197,8 +191,7 @@ class _MainPageState extends State<MainPage> {
       SBBCheckboxListItem(
         value: _detectTwoDimensionalBarcodes,
         label: 'Enable 2-D barcode scanning',
-        secondaryLabel:
-            'Will detect two-dimensional barcodes, such as classic QR codes or data matrices.',
+        secondaryLabel: 'Will detect two-dimensional barcodes, such as classic QR codes or data matrices.',
         onChanged: _scannerActive
             ? null
             : (enabled) => setState(
@@ -213,9 +206,7 @@ class _MainPageState extends State<MainPage> {
       label: 'Value detection strategy',
       value: _extractor,
       isLastElement: false,
-      onChanged: _scannerActive
-          ? null
-          : (extractor) => setState(() => _extractor = extractor!),
+      onChanged: _scannerActive ? null : (extractor) => setState(() => _extractor = extractor!),
       items: [
         SelectMenuItem(
           value: _rawTextExtractor,
@@ -242,9 +233,7 @@ class _MainPageState extends State<MainPage> {
       label: 'Detection within detection area',
       value: _detectionAreaMode,
       isLastElement: true,
-      onChanged: _scannerActive
-          ? null
-          : (mode) => setState(() => _detectionAreaMode = mode!),
+      onChanged: _scannerActive ? null : (mode) => setState(() => _detectionAreaMode = mode!),
       items: [
         SelectMenuItem(
           value: DetectionAreaMode.containsRect,
@@ -269,8 +258,7 @@ class _MainPageState extends State<MainPage> {
   Widget _zoomEnabler() {
     return SBBCheckboxListItem(
       label: 'Enable zoom',
-      secondaryLabel:
-          'Displays the zoom level and enables zoom though pinch gesture.',
+      secondaryLabel: 'Displays the zoom level and enables zoom though pinch gesture.',
       value: _enableZoom,
       onChanged: _scannerActive
           ? null
@@ -283,8 +271,7 @@ class _MainPageState extends State<MainPage> {
   Widget _detectionLabelEnabler() {
     return SBBCheckboxListItem(
       label: 'Enable detection labels',
-      secondaryLabel:
-          'Displays the contained value when highlighting a detected element.',
+      secondaryLabel: 'Displays the contained value when highlighting a detected element.',
       value: _showDetectionLabels,
       onChanged: _scannerActive
           ? null
@@ -297,8 +284,7 @@ class _MainPageState extends State<MainPage> {
   Widget _overlayEnabler() {
     return SBBCheckboxListItem(
       label: 'Enable overlay',
-      secondaryLabel:
-          'Darkens the area outside of whats being detected and shows the helper text.',
+      secondaryLabel: 'Darkens the area outside of whats being detected and shows the helper text.',
       value: _showOverlay,
       onChanged: _scannerActive
           ? null
@@ -324,16 +310,12 @@ class _MainPageState extends State<MainPage> {
 
   Widget _scannerSizeSelector(BuildContext context) {
     final screen = MediaQuery.of(context);
-    final squareSize = screen.orientation == Orientation.portrait
-        ? screen.size.width
-        : screen.size.height;
+    final squareSize = screen.orientation == Orientation.portrait ? screen.size.width : screen.size.height;
 
     return SBBSelect<Size>(
       label: 'Scanner size',
       value: _scannerSize,
-      onChanged: _scannerActive
-          ? null
-          : (size) => setState(() => _scannerSize = size!),
+      onChanged: _scannerActive ? null : (size) => setState(() => _scannerSize = size!),
       items: [
         SelectMenuItem(
           value: Size(0, 0),
@@ -359,9 +341,7 @@ class _MainPageState extends State<MainPage> {
     return SBBSelect<Size>(
       label: 'Detection area size',
       value: _detectionAreaSize,
-      onChanged: _scannerActive
-          ? null
-          : (size) => setState(() => _detectionAreaSize = size!),
+      onChanged: _scannerActive ? null : (size) => setState(() => _detectionAreaSize = size!),
       items: [
         SelectMenuItem(
           value: Size(250, 50),

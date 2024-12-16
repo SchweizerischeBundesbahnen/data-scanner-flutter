@@ -16,12 +16,7 @@ import 'package:sbb_data_scanner/widgets/zoom.dart';
 /// - [containsHorizontally] : the element-rect must be horizontally inside the detection area.
 /// - [containsVertically] : the element-rect must be vertically inside the detection area.
 /// - [intersects] : the element-rect must intersect with the detection area.
-enum DetectionAreaMode {
-  containsRect,
-  containsHorizontally,
-  containsVertically,
-  intersects
-}
+enum DetectionAreaMode { containsRect, containsHorizontally, containsVertically, intersects }
 
 /// Holds the configuration for a [DataScanner].
 class DataScannerConfiguration<T> {
@@ -114,12 +109,10 @@ class DataScanner<T> extends StatefulWidget {
   /// Configuration which the [DataScanner] should use.
   final DataScannerConfiguration<T> scannerConfiguration;
 
-  const DataScanner({Key? key, required this.scannerConfiguration})
-      : super(key: key);
+  const DataScanner({Key? key, required this.scannerConfiguration}) : super(key: key);
 
   @override
-  _DataScannerState createState() =>
-      _DataScannerState<T>(scannerConfiguration: scannerConfiguration);
+  _DataScannerState createState() => _DataScannerState<T>(scannerConfiguration: scannerConfiguration);
 }
 
 class _DataScannerState<T> extends State<DataScanner> with RouteAware {
@@ -158,8 +151,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      scannerConfiguration._routeObserver
-          .subscribe(this, ModalRoute.of(context)!);
+      scannerConfiguration._routeObserver.subscribe(this, ModalRoute.of(context)!);
     });
     super.initState();
   }
@@ -206,8 +198,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
 
     // CameraDescription.sensorOrientation doesn't always report the orientation
     // correctly, so we need to figure it out manually.
-    final nativeOrientation =
-        await NativeDeviceOrientationCommunicator().orientation();
+    final nativeOrientation = await NativeDeviceOrientationCommunicator().orientation();
 
     // MediaQuery.orientation doesn't differentiate between up/down left/right,
     // but it has an impact on the camera.
@@ -264,8 +255,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
     }
 
     // Whether the widget size is horizontally more narrow than the image
-    final isNarrow = _calculatedSize!.aspectRatio <
-        orientedImageSize.width / orientedImageSize.height;
+    final isNarrow = _calculatedSize!.aspectRatio < orientedImageSize.width / orientedImageSize.height;
 
     // If the widget is narrow, use the height to scale
     final scaleFactor = 1 /
@@ -279,8 +269,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
 
     final scaledImageBounds = Rect.fromPoints(
       Offset.zero,
-      Offset(orientedImageSize.width * scaleFactor,
-          orientedImageSize.height * scaleFactor),
+      Offset(orientedImageSize.width * scaleFactor, orientedImageSize.height * scaleFactor),
     );
 
     final previewBounds = Rect.fromPoints(
@@ -290,8 +279,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
 
     final detectionAreaBounds = Rect.fromCenter(
       center: previewBounds.center,
-      width: scannerConfiguration.detectionAreaWidth ??
-          _calculatedSize!.width - (2 * _defaultDetectionAreaMargin),
+      width: scannerConfiguration.detectionAreaWidth ?? _calculatedSize!.width - (2 * _defaultDetectionAreaMargin),
       height: scannerConfiguration.detectionAreaHeight,
     ).deflate(scannerConfiguration.detectionOutline?.padding ?? 0);
 
@@ -350,21 +338,13 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
         double cappedHeight;
 
         if (screen.orientation == Orientation.portrait) {
-          cappedWidth = constraints.maxWidth != double.infinity
-              ? constraints.maxWidth
-              : screen.size.width;
+          cappedWidth = constraints.maxWidth != double.infinity ? constraints.maxWidth : screen.size.width;
 
-          cappedHeight = constraints.maxHeight != double.infinity
-              ? constraints.maxHeight
-              : (cappedWidth / 9) * 16;
+          cappedHeight = constraints.maxHeight != double.infinity ? constraints.maxHeight : (cappedWidth / 9) * 16;
         } else {
-          cappedWidth = constraints.maxWidth != double.infinity
-              ? constraints.maxWidth
-              : screen.size.height;
+          cappedWidth = constraints.maxWidth != double.infinity ? constraints.maxWidth : screen.size.height;
 
-          cappedHeight = constraints.maxHeight != double.infinity
-              ? constraints.maxHeight
-              : (cappedWidth / 16) * 9;
+          cappedHeight = constraints.maxHeight != double.infinity ? constraints.maxHeight : (cappedWidth / 16) * 9;
         }
 
         Size cappedSize = Size(cappedWidth, cappedHeight);
@@ -386,14 +366,12 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
 
     final detectionAreaRect = Rect.fromCenter(
       center: _calculatedSize!.center(Offset.zero),
-      width: scannerConfiguration.detectionAreaWidth ??
-          _calculatedSize!.width - (2 * _defaultDetectionAreaMargin),
+      width: scannerConfiguration.detectionAreaWidth ?? _calculatedSize!.width - (2 * _defaultDetectionAreaMargin),
       height: scannerConfiguration.detectionAreaHeight,
     );
 
     return CameraBuilder(
-      onImageReceived: (image, description) =>
-          _onImageReceived(context, image, description),
+      onImageReceived: (image, description) => _onImageReceived(context, image, description),
       onPermissionDenied: scannerConfiguration.onPermissionDenied,
       onError: scannerConfiguration.onError,
       onZoomChanged: (zoom) {
@@ -417,8 +395,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
                 upperHelper: scannerConfiguration.upperHelper,
                 lowerHelper: scannerConfiguration.lowerHelper,
               ),
-            if (scannerConfiguration.detectionOutline != null &&
-                _detectedElements?.isNotEmpty == true)
+            if (scannerConfiguration.detectionOutline != null && _detectedElements?.isNotEmpty == true)
               DetectionOutline(
                 boundingBoxes: _detectedElements!,
                 detectionAreaBoundingBox: detectionAreaRect,
@@ -437,9 +414,10 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 32.0, left: 32.0),
                     child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Zoom(zoom: zoom,)
-                    ),
+                        alignment: Alignment.bottomLeft,
+                        child: Zoom(
+                          zoom: zoom,
+                        )),
                   );
                 },
               ),

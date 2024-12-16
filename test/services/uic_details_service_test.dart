@@ -21,8 +21,7 @@ void main() {
             'Lorem Ipsum',
           ];
 
-          testValues.forEach(
-              (testValue) => expect(service.extractUICValues(testValue), []));
+          testValues.forEach((testValue) => expect(service.extractUICValues(testValue), []));
         },
       );
 
@@ -95,8 +94,7 @@ void main() {
           final format = RegExp(r'\d\d\d\s\d\d\d-\d');
 
           testValues.forEach((testValue) {
-            final result =
-                service.formatUIC(testValue, type: UICType.sevenDigits);
+            final result = service.formatUIC(testValue, type: UICType.sevenDigits);
             expect(format.hasMatch(result), isTrue);
           });
         },

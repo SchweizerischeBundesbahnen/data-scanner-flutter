@@ -16,11 +16,9 @@ extension CameraImageX on CameraImage {
 
     final Size imageSize = Size(this.width.toDouble(), this.height.toDouble());
 
-    final InputImageRotation imageRotation =
-        InputImageRotationValue.fromRawValue(rotation)!;
+    final InputImageRotation imageRotation = InputImageRotationValue.fromRawValue(rotation)!;
 
-    final InputImageFormat inputImageFormat =
-        InputImageFormatValue.fromRawValue(this.format.raw)!;
+    final InputImageFormat inputImageFormat = InputImageFormatValue.fromRawValue(this.format.raw)!;
 
     final metadata = InputImageMetadata(
       size: imageSize,

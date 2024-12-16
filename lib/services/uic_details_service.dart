@@ -32,10 +32,7 @@ class UICDetailsService {
     for (final category in UICCategory.values) {
       final details = extractUICValues(uic, category);
       final relevantDescriptions = category == UICCategory.freightWagon ? 3 : 2;
-      if (!details
-          .take(relevantDescriptions)
-          .map((detail) => detail.description)
-          .contains(null)) {
+      if (!details.take(relevantDescriptions).map((detail) => detail.description).contains(null)) {
         return category;
       }
     }
@@ -70,11 +67,7 @@ class UICDetailsService {
 
     // 000 000-0
     if (type == UICType.sevenDigits) {
-      return onlyDigits.substring(0, 3) +
-          ' ' +
-          onlyDigits.substring(3, 6) +
-          '-' +
-          onlyDigits[6];
+      return onlyDigits.substring(0, 3) + ' ' + onlyDigits.substring(3, 6) + '-' + onlyDigits[6];
     }
 
     switch (category!) {
@@ -132,10 +125,8 @@ class UICDetailsService {
     final digit12 = uicDigits[11];
 
     return [
-      UICDescription(
-          digits1And2, _TractionUnitUICValues.digits1And2[digits1And2]),
-      UICDescription(
-          digits3And4, _TractionUnitUICValues.digits3And4[digits3And4]),
+      UICDescription(digits1And2, _TractionUnitUICValues.digits1And2[digits1And2]),
+      UICDescription(digits3And4, _TractionUnitUICValues.digits3And4[digits3And4]),
       UICDescription(digit5, _TractionUnitUICValues.digit5),
       UICDescription(digits6to8, _TractionUnitUICValues.digits6to8),
       UICDescription(digits9to11, _TractionUnitUICValues.digits9to11),
@@ -155,10 +146,8 @@ class UICDetailsService {
     final digit12 = uicDigits.substring(11, 12);
 
     return [
-      UICDescription(
-          digits1And2, _PassengerWagonUICValues.digits1And2[digits1And2]),
-      UICDescription(
-          digits3And4, _PassengerWagonUICValues.digits3And4[digits3And4]),
+      UICDescription(digits1And2, _PassengerWagonUICValues.digits1And2[digits1And2]),
+      UICDescription(digits3And4, _PassengerWagonUICValues.digits3And4[digits3And4]),
       UICDescription(digit5, _PassengerWagonUICValues.digit5[digit5]),
       UICDescription(digit6, _PassengerWagonUICValues.digit6[digit6]),
       UICDescription(digit7, _PassengerWagonUICValues.digit7[digit7]),
@@ -180,8 +169,7 @@ class UICDetailsService {
     return [
       UICDescription(digit1, _FreightWagonUICValues.digit1[digit1]),
       UICDescription(digit2, _FreightWagonUICValues.digit2[digit2]),
-      UICDescription(
-          digits3And4, _FreightWagonUICValues.digits3And4[digits3And4]),
+      UICDescription(digits3And4, _FreightWagonUICValues.digits3And4[digits3And4]),
       UICDescription(digits5to8, _FreightWagonUICValues.digits5to8),
       UICDescription(digits9to11, _FreightWagonUICValues.digits9to11),
       UICDescription(digit12, _FreightWagonUICValues.digit12),

@@ -43,8 +43,7 @@ class HolePainter extends CustomPainter {
   void _paintBackgroundWithHole(Canvas canvas, Size size) {
     final paint = Paint();
     paint.color = overlayColor.withOpacity(overlayColorOpacity);
-    final background = Path()
-      ..addRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height));
+    final background = Path()..addRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height));
     if (rect.height == 0 && rect.width == 0) {
       canvas.drawPath(background, paint);
     } else {

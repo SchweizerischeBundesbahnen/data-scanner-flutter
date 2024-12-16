@@ -36,8 +36,7 @@ class CameraBuilder extends StatefulWidget {
   State<CameraBuilder> createState() => _CameraBuilderState();
 }
 
-class _CameraBuilderState extends State<CameraBuilder>
-    with WidgetsBindingObserver {
+class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserver {
   /// Controls the device's cameras.
   CameraController? _cameraController;
   late Completer<void> _cameraControllerCompleter;
@@ -95,8 +94,7 @@ class _CameraBuilderState extends State<CameraBuilder>
     }
 
     // create and setup new camera instance
-    final CameraDescription description =
-        await CameraService.getCamera(CameraLensDirection.back);
+    final CameraDescription description = await CameraService.getCamera(CameraLensDirection.back);
 
     final cameraController = CameraController(
       description,
@@ -125,8 +123,7 @@ class _CameraBuilderState extends State<CameraBuilder>
           if (widget.onPermissionDenied != null) widget.onPermissionDenied!();
           break;
         default:
-          if (widget.onError != null)
-            widget.onError!('${e.code}: ${e.description}');
+          if (widget.onError != null) widget.onError!('${e.code}: ${e.description}');
           break;
       }
     }
@@ -146,8 +143,7 @@ class _CameraBuilderState extends State<CameraBuilder>
           },
         );
       } on CameraException catch (e) {
-        if (widget.onError != null)
-          widget.onError!('${e.code}: ${e.description}');
+        if (widget.onError != null) widget.onError!('${e.code}: ${e.description}');
       }
     }
 
@@ -156,8 +152,7 @@ class _CameraBuilderState extends State<CameraBuilder>
     if (mounted) {
       setState(() {});
     }
-    if (!_cameraControllerCompleter.isCompleted)
-      _cameraControllerCompleter.complete();
+    if (!_cameraControllerCompleter.isCompleted) _cameraControllerCompleter.complete();
 
     return _cameraControllerCompleter.future;
   }
@@ -168,8 +163,7 @@ class _CameraBuilderState extends State<CameraBuilder>
       CameraController? currentCameraController = _cameraController;
       if (currentCameraController != null) {
         _cameraController = null;
-        if (currentCameraController.value.isInitialized &&
-            currentCameraController.value.isStreamingImages) {
+        if (currentCameraController.value.isInitialized && currentCameraController.value.isStreamingImages) {
           await currentCameraController.stopImageStream();
         }
 
@@ -194,8 +188,7 @@ class _CameraBuilderState extends State<CameraBuilder>
       scaleFactor >= _minZoom && scaleFactor <= _maxZoom && scaleFactor <= _absoluteMaxZoom;
 
   bool _isScaleFactorDiffLargeEnough(double newScaleFactor) =>
-      _scaleFactor - newScaleFactor > _minScaleFactorDiff ||
-      _scaleFactor - newScaleFactor < -_minScaleFactorDiff;
+      _scaleFactor - newScaleFactor > _minScaleFactorDiff || _scaleFactor - newScaleFactor < -_minScaleFactorDiff;
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +204,7 @@ class _CameraBuilderState extends State<CameraBuilder>
           },
           onScaleUpdate: (details) {
             final newScaleFactor = _zoom * details.scale;
-            if (_isScaleFactorDiffLargeEnough(newScaleFactor) &&
-                _isScaleFactorValid(newScaleFactor)) {
+            if (_isScaleFactorDiffLargeEnough(newScaleFactor) && _isScaleFactorValid(newScaleFactor)) {
               _scaleFactor = newScaleFactor;
               _cameraController!.setZoomLevel(_scaleFactor);
               if (widget.onZoomChanged != null) {

@@ -43,8 +43,7 @@ class UICDetails {
   });
 
   /// Prints an object string. Use this instead of [UICDetails.toString].
-  String toObjectString() =>
-      '{uicNumber: $uicNumber, uicValues: $descriptions}';
+  String toObjectString() => '{uicNumber: $uicNumber, uicValues: $descriptions}';
 
   /// Used in combination with generic types to ensure it can be properly
   /// displayed in e.g. [DetectionOutlineConfig] labels. Use

@@ -10,6 +10,5 @@ extension RectX on Rect {
       );
 
   /// Returns whether the [child] is completely encapsulated by the [Rect].
-  bool containsRect(Rect child) =>
-      contains(child.topLeft) && contains(child.bottomRight);
+  bool containsRect(Rect child) => contains(child.topLeft) && contains(child.bottomRight);
 }
