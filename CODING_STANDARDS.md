@@ -1,5 +1,3 @@
-> **Note:** This is a template. Please make necessary changes and modify the template as per your needs. For reference please use the following resources.
-
 # Repository Coding Standards
 
 The purpose of the Coding Standards is to create a baseline for collaboration and review within various aspects of our open source project and community, from core code to themes to plugins.
@@ -10,13 +8,24 @@ Following the standards means anyone will be able to understand a section of cod
 
 If you are planning to contribute, you need to familiarize yourself with these standards, as any code you submit will need to comply with them.
 
-## Language-specific Standards
-* Language 1
-* Language 2
+## Coding standards
 
-## Tool-specific Settings
-* Tool 1 settings
-* Tool 2 settings
+Please refer to the following guideline for detailed recommendations:
 
-For reference please check the following repos:
-* https://github.com/sbb-design-systems/sbb-angular/blob/main/CODING_STANDARDS.md
+[Style guide for Flutter](https://github.com/flutter/flutter/blob/master/docs/contributing/Style-guide-for-Flutter-repo.md)
+
+## Code style
+
+Your code should adhere to the effective [dart style](https://dart.dev/effective-dart/style).
+
+## Code formatting
+
+According to the above recommended style, we check our code for formatting with the `dart format` cli in our CI
+(before running src code generation, e.g. Mocks).
+The only deviation is a line length of `120` compared to the standard guide. If your code does not follow these standards,
+the CI will fail. We run this step:
+
+```yml
+- name: format check
+  run: dart format -l 120 -o none --set-exit-if-changed .
+```
