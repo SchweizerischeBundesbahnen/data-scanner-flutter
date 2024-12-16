@@ -1,0 +1,100 @@
+# Runs flutter unit tests, formatting test and CHANGELOG.md validation on every PR to main.
+
+name: test
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Ensure that new pushes/updates cancel running jobs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: flutter setup
+        run: |
+          flutter doctor -v
+          flutter pub get
+
+      - name: format check
+        run: dart format -l 120 -o none --set-exit-if-changed .
+
+      - name: test
+        run: flutter test
+
+  package_scorer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: axel-op/dart-package-analyzer@v3
+        id: analysis
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  ### FROM HERE: ALL DONE AFTER VALIDATION SUCCEEDS
+
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: [validation]
+    defaults:
+      run:
+        working-directory: example
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: ["3.16.9", ""]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.sdk }}
+          cache: true
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: "gradle"
+
+      - run: flutter pub get
+      - run: flutter build appbundle --profile --no-pub
+
+  build-iOS:
+    name: Build iOS package
+    runs-on: macos-latest
+    needs: [validation]
+    defaults:
+      run:
+        working-directory: example
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: ["3.16.9", ""]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.sdk }}
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter build ios --simulator
