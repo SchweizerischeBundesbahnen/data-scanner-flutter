@@ -1,6 +1,8 @@
 This package allows the recognition of optical encoded information related to SBB use cases in your
 Flutter application. It is built on top of [google_mlkit] and runs solely on-device.
 
+<p align="center"><img src="https://raw.githubusercontent.com/SchweizerischeBundesbahnen/data-scanner-flutter/main/assets/example.gif" alt="iOS and Android example" width="80%"></p>
+
 #### Table Of Contents
 
 <details>
