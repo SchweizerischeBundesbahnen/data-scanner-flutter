@@ -339,3 +339,4 @@ See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 [Camera]: https://pub.dev/packages/camera
 [UIC number]: https://en.wikipedia.org/wiki/UIC_wagon_numbers
 [GS1 codes]: https://en.wikipedia.org/wiki/GS1#Barcodes
+[google_mlkit]: https://developers.google.com/ml-kit
