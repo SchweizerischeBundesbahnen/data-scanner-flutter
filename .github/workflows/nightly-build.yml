@@ -51,16 +51,13 @@ jobs:
     defaults:
       run:
         working-directory: example
-    strategy:
-      fail-fast: false
-      matrix:
-        sdk: ["3.16.9", ""]
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ matrix.sdk }}
+          channel: stable
           cache: true
 
       - uses: actions/setup-java@v4
@@ -79,16 +76,12 @@ jobs:
     defaults:
       run:
         working-directory: example
-    strategy:
-      fail-fast: false
-      matrix:
-        sdk: ["3.16.9", ""]
     steps:
       - uses: actions/checkout@v4
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ matrix.sdk }}
+          channel: stable
           cache: true
 
       - run: flutter pub get
