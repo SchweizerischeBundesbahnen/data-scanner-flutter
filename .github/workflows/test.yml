@@ -97,4 +97,4 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: flutter build ios --simulator
+      - run: flutter build ios --simulator --verbose
