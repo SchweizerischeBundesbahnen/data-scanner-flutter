@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "package-name": "sbb_data_scanner",
+      "release-type": "dart",
+      "component": "root"
+    }
+  },
+  "include-v-in-tag": false,
+  "include-component-in-tag": false,
+  "pull-request-title-pattern": "Release ${version}"
+}
