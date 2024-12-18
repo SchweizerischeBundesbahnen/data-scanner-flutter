@@ -1,7 +1,5 @@
-This package allows the recognition of optical encoded information related to SBB use cases in your
-Flutter application. It is built on top of [google_mlkit] and runs solely on-device.
-
-<p align="center"><img src="https://raw.githubusercontent.com/SchweizerischeBundesbahnen/data-scanner-flutter/main/assets/example.gif" alt="iOS and Android example" width="80%"></p>
+This package allows the recognition of optical encoded information related to SBB use cases.
+It is built on top of [google_mlkit] and runs solely on-device.
 
 #### Table Of Contents
 
@@ -153,22 +151,22 @@ DataScanner(
 
 #### Vision Processors
 
-The purpose of vision processors is to detect elements in an image and return their value and position relative to an origin point (usually the top left corner). The library ships with three preconfigured vision processors, all based on [Google ML Kit](https://pub.dev/packages/google_ml_kit):
+The purpose of vision processors is to detect elements in an image and return their value and position relative
+to an origin point (usually the top left corner). 
+The library ships with three preconfigured vision processors,
+all based on [Google ML Kit](https://pub.dev/packages/google_ml_kit):
 
 - [`TextRecognitionVisionProcessor`](#text-recognition)
 - [`OneDimensionalBarcodeVisionProcessor`](#one-dimensional-barcode-scanning)
 - [`TwoDimensionalBarcodeVisionProcessor`](#two-dimensional-barcode-scanning)
 
-Additionally, it is possible create your own custom vision processor by implementing the `VisionProcessor` interface.
-This allows the library to also detect elements other than text, QR-codes and barcodes - see [Example Custom Processor](#vision-processors-custom).
+| Processor Name                       | Note                                                                                                                    |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| TextRecognitionVisionProcessor       | Recognize text in images. Only supports the Latin script. Please contact a [maintainer](#maintainer) for other scripts. |
+| OneDimensionalBarcodeVisionProcessor | This extractor extracts the value of [UIC number]s and provides information and detailed descriptions for it.           |
+| TwoDimensionalBarcodeVisionProcessor | This extractor extracts the value of [GS1 codes] and provides information and detailed descriptions for it.             |
 
-<a name="vision-processors-text"></a>
-*Text*
-
-The library's corresponding vision processor for recognizing text in images is named `TextRecognitionVisionProcessor` 
-and currently only supports the Latin script.
-If you need to scan for a different script, please contact a [maintainer](#overview).
-The vision processor takes no parameters:
+Add a list of processor(s) to the `DataScannerConfiguration` `processors` argument:
 
 ```dart
 DataScanner(
@@ -176,46 +174,15 @@ DataScanner(
     // ...
     processors: [
       TextRecognitionVisionProcessor(),
+      // OneDimensionalBarcodeVisionProcessor(),
+      // TwoDimensionalBarcodeVisionProcessor()
     ],
   ),
 )
 ```
 
-<a name="vision-processors-barcode-one"></a>
-*One Dimensional Barcode*
-
-The library's corresponding vision processor for 1-D barcodes (e.g. as you'd find on a carton of milk) is named `OneDimensionalBarcodeVisionProcessor` and takes no parameters:
-
-```dart
-DataScanner(
-  scannerConfiguration: DataScannerConfiguration(
-    // ...
-    processors: [
-      OneDimensionalBarcodeVisionProcessor(),
-    ],
-  ),
-)
-```
-
-<a name="vision-processors-barcode-two"></a>
-*Two Dimensional Barcode*
-
-The library's corresponding vision processor for 2-D barcodes (e.g. classic QR-codes or data matrices) is named `TwoDimensionalBarcodeVisionProcessor` and takes no parameters:
-
-```dart
-DataScanner(
-  scannerConfiguration: DataScannerConfiguration(
-    // ...
-    processors: [
-      TwoDimensionalBarcodeVisionProcessor(),
-    ],
-  ),
-)
-```
-
-<a name="vision-processors-custom"></a>
-*Example Custom Processor*
-
+Additionally, it is possible create your own custom vision processor by implementing the `VisionProcessor` interface.
+This allows the library to also detect elements other than text, QR-codes and barcodes:
 
 ```dart
 abstract class VisionProcessor {
