@@ -78,7 +78,7 @@ jobs:
       - run: flutter build appbundle --profile --no-pub
 
   build-iOS:
-    name: Build iOS package
+    name: Build iOS
     runs-on: macos-latest
     needs: [validation]
     defaults:
@@ -97,4 +97,4 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: flutter build ios --simulator
+      - run: flutter build ios --no-codesign
