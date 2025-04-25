@@ -15,7 +15,7 @@ dependencies:
     path: ../
 
   # https://pub.dev/packages/sbb_design_system_mobile
-  sbb_design_system_mobile: ^2.0.0
+  sbb_design_system_mobile: ^3.0.0
 
   # https://pub.dev/packages/cupertino_icons
   cupertino_icons: ^1.0.8
