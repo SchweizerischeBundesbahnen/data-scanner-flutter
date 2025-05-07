@@ -25,7 +25,7 @@ if (flutterVersionName == null) {
 android {
     namespace 'ch.sbb.datascanner.example'
 
-    compileSdk 34
+    compileSdk 35
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -34,7 +34,7 @@ android {
     defaultConfig {
         applicationId "ch.sbb.datascanner.example"
         minSdkVersion 21
-        targetSdk 34
+        targetSdk 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -48,6 +48,14 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
+    }
+
+    kotlin {
+        jvmToolchain(17)
     }
 
     aaptOptions {
