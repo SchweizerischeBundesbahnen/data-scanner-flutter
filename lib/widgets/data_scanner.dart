@@ -72,6 +72,9 @@ class DataScannerConfiguration<T> {
   /// Whether to show the torch toggle. Defaults to `false`.
   final bool showTorchToggle;
 
+  /// Whether to rotate the camera preview on Android. Defaults to `false`. Consider this a workaround!
+  final bool rotateOnAndroid;
+
   /// Where to position the torch toggle. Defaults to [Alignment.bottomCenter]
   final Alignment torchToggleAlignment;
 
@@ -100,6 +103,7 @@ class DataScannerConfiguration<T> {
     this.torchToggleAlignment = Alignment.bottomCenter,
     this.torchToggleMargin = const EdgeInsets.all(32),
     this.detectionOutline,
+    this.rotateOnAndroid = false,
     RouteObserver<ModalRoute>? routeObserver,
   }) : _routeObserver = routeObserver ?? RouteObserver();
 }
@@ -387,6 +391,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
             SizedCameraPreview(
               size: _calculatedSize!,
               cameraController: cameraController,
+              rotateOnAndroid: scannerConfiguration.rotateOnAndroid,
             ),
             if (scannerConfiguration.showOverlay)
               CameraOverlay(

@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 
 /// Sized and scaled [CameraPreview] wrapper.
 class SizedCameraPreview<T> extends StatefulWidget {
+  /// temporary Workaround: rotate Camera Preview on Android Devices
+  final bool rotateOnAndroid;
+
   /// Size of the clipped preview.
   final Size size;
 
@@ -15,6 +18,7 @@ class SizedCameraPreview<T> extends StatefulWidget {
     Key? key,
     required this.size,
     required this.cameraController,
+    this.rotateOnAndroid = false,
   }) : super(key: key);
 
   @override
@@ -48,7 +52,7 @@ class _SizedCameraPreviewState<T> extends State<SizedCameraPreview> {
   }
 
   Widget _rotatedOnAndroid(Widget content) {
-    if (Platform.isAndroid) {
+    if (widget.rotateOnAndroid && Platform.isAndroid) {
       return RotatedBox(
         quarterTurns: 1,
         child: content,
