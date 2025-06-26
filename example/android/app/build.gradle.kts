@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "ch.sbb.datascanner.example"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -37,9 +37,10 @@ android {
 //        targetCompatibility = JavaVersion.VERSION_17
 //    }
 
-    aaptOptions {
-        noCompress = "tflite"
+    androidResources {
+        noCompress += "tflite"
     }
+
 }
 
 flutter {
