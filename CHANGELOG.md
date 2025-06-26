@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.0](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/compare/4.4.1...4.5.0) (2025-06-26)
+
+
+### Features
+
+* bump minimum supported flutter sdk to 3.27.x ([#39](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/issues/39)) ([fe97685](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/commit/fe97685f601bc1d0d14c80881e6c752cd8eed53d))
+
 ## [4.4.1](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/compare/4.4.0...4.4.1) (2024-12-18)
 
 
