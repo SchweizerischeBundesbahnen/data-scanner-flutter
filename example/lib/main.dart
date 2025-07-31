@@ -457,7 +457,7 @@ class _MainPageState extends State<MainPage> {
 
     if (value.runtimeType == String) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: isDark ? style.groupBackgroundColor : null,
+        backgroundColor: isDark ? style.modalBackgroundColor : null,
         content: Row(children: [
           Padding(
             padding: EdgeInsets.only(right: _spacing / 2, bottom: _spacing / 4),
@@ -478,7 +478,7 @@ class _MainPageState extends State<MainPage> {
       ));
     } else if (value.runtimeType == UICDetails) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: isDark ? style.groupBackgroundColor : null,
+        backgroundColor: isDark ? style.modalBackgroundColor : null,
         action: SnackBarAction(
           label: 'DETAILS',
           onPressed: () => _showUicDetails(value),
@@ -501,7 +501,6 @@ class _MainPageState extends State<MainPage> {
       ));
     } else if (value.runtimeType == GS1Details) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: isDark ? style.groupBackgroundColor : null,
         action: SnackBarAction(
           label: 'DETAILS',
           onPressed: () => _showGS1Details(value),
@@ -526,12 +525,12 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _onPermissionDenied(BuildContext context) {
-    SBBToast.of(context).show(message: 'Missing camera permission');
+    SBBToast.of(context).show(title: 'Missing camera permission');
     _toggleScanner();
   }
 
   void _onScannerError(String error, BuildContext context) {
-    SBBToast.of(context).show(message: 'Error: $error');
+    SBBToast.of(context).show(title: 'Error: $error');
     _toggleScanner();
   }
 
