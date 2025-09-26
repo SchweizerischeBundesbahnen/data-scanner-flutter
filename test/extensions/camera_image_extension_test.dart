@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -9,6 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sbb_data_scanner/extensions/_extensions.dart';
 
 class MockPlane extends Mock implements Plane {}
+
 class MockCameraImage extends Mock implements CameraImage {}
 
 class FakeImageFormat extends Fake implements ImageFormat {

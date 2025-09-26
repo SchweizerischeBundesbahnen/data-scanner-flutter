@@ -13,17 +13,13 @@ extension CameraImageX on CameraImage {
       allBytes.putUint8List(plane.bytes);
     }
 
-    final bytes = Platform.isAndroid
-        ? this.getNv21Uint8List()
-        : allBytes.done().buffer.asUint8List();
+    final bytes = Platform.isAndroid ? this.getNv21Uint8List() : allBytes.done().buffer.asUint8List();
 
     final Size imageSize = Size(this.width.toDouble(), this.height.toDouble());
 
-    final InputImageRotation imageRotation =
-        InputImageRotationValue.fromRawValue(rotation)!;
+    final InputImageRotation imageRotation = InputImageRotationValue.fromRawValue(rotation)!;
 
-    final InputImageFormat inputImageFormat =
-        InputImageFormatValue.fromRawValue(this.format.raw)!;
+    final InputImageFormat inputImageFormat = InputImageFormatValue.fromRawValue(this.format.raw)!;
 
     final metadata = InputImageMetadata(
       size: imageSize,
