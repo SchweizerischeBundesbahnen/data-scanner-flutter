@@ -15,17 +15,14 @@ void main() {
     });
 
     group('validate', () {
-      test(
-        'should check Luhn checksum',
-        () async {
-          when(() => mockLuhn.validate(any())).thenReturn(true);
+      test('should check Luhn checksum', () async {
+        when(() => mockLuhn.validate(any())).thenReturn(true);
 
-          final testValue = '918544202107';
-          service.validate(testValue);
+        final testValue = '918544202107';
+        service.validate(testValue);
 
-          verify(() => mockLuhn.validate(testValue));
-        },
-      );
+        verify(() => mockLuhn.validate(testValue));
+      });
     });
   });
 
@@ -60,13 +57,10 @@ void main() {
       ];
 
       testValues.forEach((testValue) {
-        test(
-          'should correctly validate the Luhn checksum of [${testValue['testValue']}]',
-          () async {
-            final result = luhn.validate(testValue['testValue'] as String);
-            expect(result, testValue['expected']);
-          },
-        );
+        test('should correctly validate the Luhn checksum of [${testValue['testValue']}]', () async {
+          final result = luhn.validate(testValue['testValue'] as String);
+          expect(result, testValue['expected']);
+        });
       });
     });
   });

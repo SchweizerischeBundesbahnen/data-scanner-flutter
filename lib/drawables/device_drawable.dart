@@ -11,19 +11,11 @@ class DeviceLogoDrawable extends StatelessWidget {
   /// Stroke color of the device icon. Defaults to [Colors.white].
   final Color color;
 
-  const DeviceLogoDrawable({
-    Key? key,
-    this.width = 28,
-    this.height = 50,
-    this.color = Colors.white,
-  }) : super(key: key);
+  const DeviceLogoDrawable({Key? key, this.width = 28, this.height = 50, this.color = Colors.white}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size(width, height),
-      painter: _RPSCustomPainter(color),
-    );
+    return CustomPaint(size: Size(width, height), painter: _RPSCustomPainter(color));
   }
 }
 

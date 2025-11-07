@@ -34,19 +34,9 @@ class CameraOverlay extends StatelessWidget {
           child: Container(),
         ),
         if (upperHelper != null)
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: previewSize.height - detectionAreaBoundingBox.top,
-            child: upperHelper!,
-          ),
+          Positioned(left: 0, right: 0, bottom: previewSize.height - detectionAreaBoundingBox.top, child: upperHelper!),
         if (lowerHelper != null)
-          Positioned(
-            top: detectionAreaBoundingBox.bottom,
-            left: 0,
-            right: 0,
-            child: lowerHelper!,
-          ),
+          Positioned(top: detectionAreaBoundingBox.bottom, left: 0, right: 0, child: lowerHelper!),
       ],
     );
   }

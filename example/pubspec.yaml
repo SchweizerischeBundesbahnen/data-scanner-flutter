@@ -4,8 +4,8 @@ publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
-  flutter: ">=3.27.0"
+  sdk: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"
 
 dependencies:
   flutter:
@@ -15,7 +15,7 @@ dependencies:
     path: ../
 
   # https://pub.dev/packages/sbb_design_system_mobile
-  sbb_design_system_mobile: ^3.0.0
+  sbb_design_system_mobile: ^4.1.0
 
   # https://pub.dev/packages/cupertino_icons
   cupertino_icons: ^1.0.8
@@ -26,4 +26,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  disable-swift-package-manager: true

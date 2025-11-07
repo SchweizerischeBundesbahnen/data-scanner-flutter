@@ -9,10 +9,7 @@ class TextRecognitionVisionProcessor implements VisionProcessor {
   final _scanner = TextRecognizer(script: TextRecognitionScript.latin);
 
   @override
-  Future<Map<Rect, String?>> getBoundingBoxes({
-    required CameraImage image,
-    required int imageRotation,
-  }) async {
+  Future<Map<Rect, String?>> getBoundingBoxes({required CameraImage image, required int imageRotation}) async {
     final input = image.toInputImage(rotation: imageRotation);
     final value = await _scanner.processImage(input);
 

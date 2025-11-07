@@ -13,12 +13,8 @@ class DataScannerPage<T> extends StatelessWidget {
   /// Whether to display the SBB logo.
   final bool showSBBLogo;
 
-  DataScannerPage({
-    Key? key,
-    required this.scannerConfiguration,
-    this.title,
-    this.showSBBLogo = true,
-  }) : super(key: key);
+  DataScannerPage({Key? key, required this.scannerConfiguration, this.title, this.showSBBLogo = true})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {

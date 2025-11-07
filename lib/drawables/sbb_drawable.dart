@@ -5,19 +5,13 @@ class SBBLogoDrawable extends StatelessWidget {
   /// Stroke color of the logo. Defaults to [Colors.white].
   final Color color;
 
-  const SBBLogoDrawable({
-    Key? key,
-    this.color = Colors.white,
-  }) : super(key: key);
+  const SBBLogoDrawable({Key? key, this.color = Colors.white}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 21.0, horizontal: 16),
-      child: CustomPaint(
-        size: Size(28, 14),
-        painter: _RPSCustomPainter(color),
-      ),
+      child: CustomPaint(size: Size(28, 14), painter: _RPSCustomPainter(color)),
     );
   }
 }

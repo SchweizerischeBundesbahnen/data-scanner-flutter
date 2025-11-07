@@ -17,8 +17,9 @@ class GS1ValidatorService {
   // https://www.gs1.org/standards/barcodes/application-identifiers/8004?lang=en
   bool _validateGIAI(String gs1) {
     final onlyDigits = gs1.replaceAll(RegExp(r'\D'), '');
-    final isValid =
-        RegExp(r'^8004([\x21-\x22\x25-\x2F\x30-\x39\x3A-\x3F\x41-\x5A\x5F\x61-\x7A]{0,30})$').hasMatch(onlyDigits);
+    final isValid = RegExp(
+      r'^8004([\x21-\x22\x25-\x2F\x30-\x39\x3A-\x3F\x41-\x5A\x5F\x61-\x7A]{0,30})$',
+    ).hasMatch(onlyDigits);
     return isValid;
   }
 }

@@ -15,11 +15,9 @@ class GS1DetailsExtractor implements Extractor<GS1Details> {
 
   final RegExp _everythingExceptDigits = RegExp(r'\D');
 
-  GS1DetailsExtractor({
-    GS1ValidatorService? gs1ValidatorService,
-    GS1DetailsService? gs1DetailsService,
-  })  : _gs1ValidatorService = gs1ValidatorService ?? GS1ValidatorService(),
-        _gs1DetailsService = gs1DetailsService ?? GS1DetailsService();
+  GS1DetailsExtractor({GS1ValidatorService? gs1ValidatorService, GS1DetailsService? gs1DetailsService})
+    : _gs1ValidatorService = gs1ValidatorService ?? GS1ValidatorService(),
+      _gs1DetailsService = gs1DetailsService ?? GS1DetailsService();
 
   /// Extracts an gs1 code from [input] and splits it up into its
   /// [GS1Details] Returns `null` if [input] is `null` or if the resulting gs1
@@ -35,10 +33,7 @@ class GS1DetailsExtractor implements Extractor<GS1Details> {
     final List<GS1Description> values = _gs1DetailsService.extractGS1Values(gs1, type);
 
     return GS1Details(
-      gs1Code: _gs1DetailsService.formatGS1(
-        gs1,
-        type: type,
-      ),
+      gs1Code: _gs1DetailsService.formatGS1(gs1, type: type),
       rawValue: input,
       gs1type: type,
       descriptions: values,

@@ -26,9 +26,9 @@ class UICDetailsExtractor implements Extractor<UICDetails> {
     UICDetectionMode? uicDetectionMode,
     UICValidatorService? uicValidatorService,
     UICDetailsService? uicDetailsService,
-  })  : _uicDetectionMode = uicDetectionMode ?? UICDetectionMode.strict,
-        _uicValidatorService = uicValidatorService ?? UICValidatorService(),
-        _uicDetailsService = uicDetailsService ?? UICDetailsService();
+  }) : _uicDetectionMode = uicDetectionMode ?? UICDetectionMode.strict,
+       _uicValidatorService = uicValidatorService ?? UICValidatorService(),
+       _uicDetailsService = uicDetailsService ?? UICDetailsService();
 
   /// Extracts an UIC number from [input] and splits it up into its
   /// [UICDetails] Returns `null` if [input] is `null` or if the resulting UIC
@@ -42,15 +42,12 @@ class UICDetailsExtractor implements Extractor<UICDetails> {
 
     final uicCategory = _uicDetailsService.determineCategory(uic);
     final uicType = _uicDetailsService.determineType(uic);
-    final List<UICDescription> values =
-        uicCategory != null ? _uicDetailsService.extractUICValues(uic, uicCategory) : [];
+    final List<UICDescription> values = uicCategory != null
+        ? _uicDetailsService.extractUICValues(uic, uicCategory)
+        : [];
 
     return UICDetails(
-      uicNumber: _uicDetailsService.formatUIC(
-        uic,
-        category: uicCategory,
-        type: uicType,
-      ),
+      uicNumber: _uicDetailsService.formatUIC(uic, category: uicCategory, type: uicType),
       uicType: uicType,
       descriptions: values,
       uicCategory: uicCategory,
