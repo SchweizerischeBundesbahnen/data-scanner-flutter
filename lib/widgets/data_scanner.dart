@@ -186,11 +186,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
   /// Analyzes bounding boxes and extracts the text from the ones which are
   /// within the area of [HoleBox]. Skips [scannerConfiguration.onExtracted]
   /// when the same element is scanned at least twice in a row.
-  Future<void> _onImageReceived(
-    BuildContext context,
-    CameraImage image,
-    CameraDescription description,
-  ) async {
+  Future<void> _onImageReceived(BuildContext context, CameraImage image, CameraDescription description) async {
     if (_paused || _isDetecting || !mounted) return;
 
     _isDetecting = true;
@@ -214,29 +210,18 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
     Map<Rect, String?> boundingBoxes = {};
 
     for (final processor in scannerConfiguration.processors) {
-      boundingBoxes.addAll(
-        await processor.getBoundingBoxes(
-          image: image,
-          imageRotation: rotation,
-        ),
-      );
+      boundingBoxes.addAll(await processor.getBoundingBoxes(image: image, imageRotation: rotation));
     }
 
     Map<Rect, T?> detectedElements = {};
 
     for (final extractor in scannerConfiguration.extractors) {
-      detectedElements.addAll(
-        boundingBoxes.map(
-          (key, value) => MapEntry(key, extractor.extract(value)),
-        ),
-      );
+      detectedElements.addAll(boundingBoxes.map((key, value) => MapEntry(key, extractor.extract(value))));
     }
 
     detectedElements.removeWhere((key, value) => value == null);
 
-    Map<Rect, T> extractedElements = detectedElements.map(
-      (key, value) => MapEntry(key, value!),
-    );
+    Map<Rect, T> extractedElements = detectedElements.map((key, value) => MapEntry(key, value!));
 
     // Make absolutely sure the scanner is still active before accessing context
     if (_paused) return;
@@ -257,14 +242,13 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
     final isNarrow = _calculatedSize!.aspectRatio < orientedImageSize.width / orientedImageSize.height;
 
     // If the widget is narrow, use the height to scale
-    final scaleFactor = 1 /
+    final scaleFactor =
+        1 /
         (isNarrow
             ? orientedImageSize.height / _calculatedSize!.height
             : orientedImageSize.width / _calculatedSize!.width);
 
-    final scaledElements = extractedElements.map(
-      (key, value) => MapEntry(key.scale(scaleFactor), value),
-    );
+    final scaledElements = extractedElements.map((key, value) => MapEntry(key.scale(scaleFactor), value));
 
     final scaledImageBounds = Rect.fromPoints(
       Offset.zero,
@@ -285,23 +269,15 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
     final deltaY = (scaledImageBounds.height - _calculatedSize!.height) / -2;
     final deltaX = (scaledImageBounds.width - _calculatedSize!.width) / -2;
 
-    final translatedElements = scaledElements.map(
-      (key, value) => MapEntry(key.translate(deltaX, deltaY), value),
-    );
+    final translatedElements = scaledElements.map((key, value) => MapEntry(key.translate(deltaX, deltaY), value));
 
-    translatedElements.removeWhere(
-      (key, value) => !_isWithinArea(previewBounds, key),
-    );
+    translatedElements.removeWhere((key, value) => !_isWithinArea(previewBounds, key));
 
     if (mounted) {
-      setState(() => _detectedElements = translatedElements.map(
-            (key, value) => MapEntry(key, value.toString()),
-          ));
+      setState(() => _detectedElements = translatedElements.map((key, value) => MapEntry(key, value.toString())));
     }
 
-    translatedElements.removeWhere(
-      (key, value) => !_isWithinArea(detectionAreaBounds, key),
-    );
+    translatedElements.removeWhere((key, value) => !_isWithinArea(detectionAreaBounds, key));
 
     if (translatedElements.isNotEmpty) {
       final result = translatedElements[translatedElements.keys.first]!;
@@ -332,31 +308,33 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
     final screen = MediaQuery.of(context);
 
     if (_calculatedSize == null || _previousOrientation != screen.orientation) {
-      return LayoutBuilder(builder: (context, constraints) {
-        double cappedWidth;
-        double cappedHeight;
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          double cappedWidth;
+          double cappedHeight;
 
-        if (screen.orientation == Orientation.portrait) {
-          cappedWidth = constraints.maxWidth != double.infinity ? constraints.maxWidth : screen.size.width;
+          if (screen.orientation == Orientation.portrait) {
+            cappedWidth = constraints.maxWidth != double.infinity ? constraints.maxWidth : screen.size.width;
 
-          cappedHeight = constraints.maxHeight != double.infinity ? constraints.maxHeight : (cappedWidth / 9) * 16;
-        } else {
-          cappedWidth = constraints.maxWidth != double.infinity ? constraints.maxWidth : screen.size.height;
+            cappedHeight = constraints.maxHeight != double.infinity ? constraints.maxHeight : (cappedWidth / 9) * 16;
+          } else {
+            cappedWidth = constraints.maxWidth != double.infinity ? constraints.maxWidth : screen.size.height;
 
-          cappedHeight = constraints.maxHeight != double.infinity ? constraints.maxHeight : (cappedWidth / 16) * 9;
-        }
+            cappedHeight = constraints.maxHeight != double.infinity ? constraints.maxHeight : (cappedWidth / 16) * 9;
+          }
 
-        Size cappedSize = Size(cappedWidth, cappedHeight);
+          Size cappedSize = Size(cappedWidth, cappedHeight);
 
-        SchedulerBinding.instance.addPostFrameCallback(
-          (_) => setState(() {
-            _calculatedSize = cappedSize;
-            _previousOrientation = screen.orientation;
-          }),
-        );
+          SchedulerBinding.instance.addPostFrameCallback(
+            (_) => setState(() {
+              _calculatedSize = cappedSize;
+              _previousOrientation = screen.orientation;
+            }),
+          );
 
-        return SizedBox.shrink();
-      });
+          return SizedBox.shrink();
+        },
+      );
     }
 
     if (_paused) {
@@ -382,45 +360,43 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
         return SizedBox(
           width: _calculatedSize!.width,
           height: _calculatedSize!.height,
-          child: Stack(children: [
-            SizedCameraPreview(
-              size: _calculatedSize!,
-              cameraController: cameraController,
-            ),
-            if (scannerConfiguration.showOverlay)
-              CameraOverlay(
-                previewSize: _calculatedSize!,
-                detectionAreaBoundingBox: detectionAreaRect,
-                upperHelper: scannerConfiguration.upperHelper,
-                lowerHelper: scannerConfiguration.lowerHelper,
-              ),
-            if (scannerConfiguration.detectionOutline != null && _detectedElements?.isNotEmpty == true)
-              DetectionOutline(
-                boundingBoxes: _detectedElements!,
-                detectionAreaBoundingBox: detectionAreaRect,
-                outlineConfig: scannerConfiguration.detectionOutline!,
-              ),
-            if (scannerConfiguration.showTorchToggle)
-              TorchToggle(
-                cameraController: cameraController,
-                alignment: scannerConfiguration.torchToggleAlignment,
-                margin: scannerConfiguration.torchToggleMargin,
-              ),
-            if (scannerConfiguration.enableZoom)
-              ValueListenableBuilder<double>(
-                valueListenable: _zoomNotifier,
-                builder: (context, zoom, child) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 32.0, left: 32.0),
-                    child: Align(
+          child: Stack(
+            children: [
+              SizedCameraPreview(size: _calculatedSize!, cameraController: cameraController),
+              if (scannerConfiguration.showOverlay)
+                CameraOverlay(
+                  previewSize: _calculatedSize!,
+                  detectionAreaBoundingBox: detectionAreaRect,
+                  upperHelper: scannerConfiguration.upperHelper,
+                  lowerHelper: scannerConfiguration.lowerHelper,
+                ),
+              if (scannerConfiguration.detectionOutline != null && _detectedElements?.isNotEmpty == true)
+                DetectionOutline(
+                  boundingBoxes: _detectedElements!,
+                  detectionAreaBoundingBox: detectionAreaRect,
+                  outlineConfig: scannerConfiguration.detectionOutline!,
+                ),
+              if (scannerConfiguration.showTorchToggle)
+                TorchToggle(
+                  cameraController: cameraController,
+                  alignment: scannerConfiguration.torchToggleAlignment,
+                  margin: scannerConfiguration.torchToggleMargin,
+                ),
+              if (scannerConfiguration.enableZoom)
+                ValueListenableBuilder<double>(
+                  valueListenable: _zoomNotifier,
+                  builder: (context, zoom, child) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 32.0, left: 32.0),
+                      child: Align(
                         alignment: Alignment.bottomLeft,
-                        child: Zoom(
-                          zoom: zoom,
-                        )),
-                  );
-                },
-              ),
-          ]),
+                        child: Zoom(zoom: zoom),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
         );
       },
     );

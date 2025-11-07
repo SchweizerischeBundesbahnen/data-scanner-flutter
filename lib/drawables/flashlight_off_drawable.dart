@@ -5,19 +5,13 @@ class FlashlightOffDrawable extends StatelessWidget {
   /// Stroke color of the flashlight. Defaults to [Colors.white].
   final Color color;
 
-  const FlashlightOffDrawable({
-    Key? key,
-    this.color = Colors.white,
-  }) : super(key: key);
+  const FlashlightOffDrawable({Key? key, this.color = Colors.white}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: CustomPaint(
-        size: Size(24, 24),
-        painter: _RPSCustomPainter(color),
-      ),
+      child: CustomPaint(size: Size(24, 24), painter: _RPSCustomPainter(color)),
     );
   }
 }
@@ -59,7 +53,7 @@ class _RPSCustomPainter extends CustomPainter {
     Paint paint0Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.04166667;
-    paint0Stroke.color = color.withOpacity(1.0);
+    paint0Stroke.color = color.withValues(alpha: 1.0);
     canvas.drawPath(path_0, paint0Stroke);
   }
 

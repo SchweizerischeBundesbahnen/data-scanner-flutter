@@ -96,11 +96,7 @@ class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserv
     // create and setup new camera instance
     final CameraDescription description = await CameraService.getCamera(CameraLensDirection.back);
 
-    final cameraController = CameraController(
-      description,
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
+    final cameraController = CameraController(description, ResolutionPreset.high, enableAudio: false);
 
     // initialize cameraController
     try {
@@ -137,11 +133,9 @@ class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserv
       }
 
       try {
-        await cameraController.startImageStream(
-          (image) {
-            widget.onImageReceived?.call(image, description);
-          },
-        );
+        await cameraController.startImageStream((image) {
+          widget.onImageReceived?.call(image, description);
+        });
       } on CameraException catch (e) {
         if (widget.onError != null) widget.onError!('${e.code}: ${e.description}');
       }
@@ -159,29 +153,31 @@ class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserv
 
   /// Disposes of the [CameraController].
   Future<void> _stopCamera({bool updateState = true}) async {
-    _cameraControllerCompleter.future.then((value) async {
-      CameraController? currentCameraController = _cameraController;
-      if (currentCameraController != null) {
-        _cameraController = null;
-        if (currentCameraController.value.isInitialized && currentCameraController.value.isStreamingImages) {
-          await currentCameraController.stopImageStream();
-        }
+    _cameraControllerCompleter.future
+        .then((value) async {
+          CameraController? currentCameraController = _cameraController;
+          if (currentCameraController != null) {
+            _cameraController = null;
+            if (currentCameraController.value.isInitialized && currentCameraController.value.isStreamingImages) {
+              await currentCameraController.stopImageStream();
+            }
 
-        // Only dispose the controller if we have no active Cameras, as it also disposes the native Camera
-        if (activeCameras <= 0) {
-          currentCameraController.dispose();
-          while (disposableControllers.isNotEmpty) {
-            var controller = disposableControllers.removeAt(0);
-            controller.dispose();
+            // Only dispose the controller if we have no active Cameras, as it also disposes the native Camera
+            if (activeCameras <= 0) {
+              currentCameraController.dispose();
+              while (disposableControllers.isNotEmpty) {
+                var controller = disposableControllers.removeAt(0);
+                controller.dispose();
+              }
+            } else {
+              disposableControllers.add(currentCameraController);
+            }
           }
-        } else {
-          disposableControllers.add(currentCameraController);
-        }
-      }
-      if (mounted && updateState) {
-        setState(() {});
-      }
-    }).whenComplete(() => _cameraControllerCompleter = Completer<void>());
+          if (mounted && updateState) {
+            setState(() {});
+          }
+        })
+        .whenComplete(() => _cameraControllerCompleter = Completer<void>());
   }
 
   bool _isScaleFactorValid(double scaleFactor) =>
@@ -198,21 +194,22 @@ class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserv
 
     if (widget.enableZoom) {
       return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onScaleStart: (details) {
-            _zoom = _scaleFactor;
-          },
-          onScaleUpdate: (details) {
-            final newScaleFactor = _zoom * details.scale;
-            if (_isScaleFactorDiffLargeEnough(newScaleFactor) && _isScaleFactorValid(newScaleFactor)) {
-              _scaleFactor = newScaleFactor;
-              _cameraController!.setZoomLevel(_scaleFactor);
-              if (widget.onZoomChanged != null) {
-                widget.onZoomChanged!(_scaleFactor);
-              }
+        behavior: HitTestBehavior.translucent,
+        onScaleStart: (details) {
+          _zoom = _scaleFactor;
+        },
+        onScaleUpdate: (details) {
+          final newScaleFactor = _zoom * details.scale;
+          if (_isScaleFactorDiffLargeEnough(newScaleFactor) && _isScaleFactorValid(newScaleFactor)) {
+            _scaleFactor = newScaleFactor;
+            _cameraController!.setZoomLevel(_scaleFactor);
+            if (widget.onZoomChanged != null) {
+              widget.onZoomChanged!(_scaleFactor);
             }
-          },
-          child: widget.builder(context, _cameraController!));
+          }
+        },
+        child: widget.builder(context, _cameraController!),
+      );
     } else {
       return widget.builder(context, _cameraController!);
     }

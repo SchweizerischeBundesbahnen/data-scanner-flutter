@@ -9,11 +9,7 @@ class SizedCameraPreview<T> extends StatefulWidget {
   /// Controls the device cameras.
   final CameraController cameraController;
 
-  const SizedCameraPreview({
-    Key? key,
-    required this.size,
-    required this.cameraController,
-  }) : super(key: key);
+  const SizedCameraPreview({Key? key, required this.size, required this.cameraController}) : super(key: key);
 
   @override
   _SizedCameraPreviewState createState() => _SizedCameraPreviewState<T>();

@@ -21,10 +21,7 @@ class GS1DetailsService {
 
   /// Formats [gs1] to match the common format of [type] (defaults to
   /// [GS1Type.unknown] (does not get recognized)).
-  String formatGS1(
-    String gs1, {
-    GS1Type type = GS1Type.unknown,
-  }) {
+  String formatGS1(String gs1, {GS1Type type = GS1Type.unknown}) {
     final onlyDigits = gs1.replaceAll(_everythingExceptDigits, '');
 
     switch (type) {

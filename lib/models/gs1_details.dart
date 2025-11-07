@@ -34,12 +34,7 @@ class GS1Details {
   /// The GS1 code split into its different segments.
   final List<GS1Description> descriptions;
 
-  GS1Details({
-    required this.gs1Code,
-    required this.rawValue,
-    required this.gs1type,
-    required this.descriptions,
-  });
+  GS1Details({required this.gs1Code, required this.rawValue, required this.gs1type, required this.descriptions});
 
   /// Prints an object string. Use this instead of [GS1Details.toString].
   String toObjectString() => '{gs1Code: $gs1Code, gs1Values: $descriptions}';

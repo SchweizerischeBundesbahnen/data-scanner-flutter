@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum DetectionLabelPosition {
-  topLeft,
-  topRight,
-  bottomLeft,
-  bottomRight,
-  topCenter,
-  bottomCenter,
-}
+enum DetectionLabelPosition { topLeft, topRight, bottomLeft, bottomRight, topCenter, bottomCenter }
 
 extension DetectionLabelPositionX on DetectionLabelPosition {
   /// Returns matching [TextAlign].
@@ -102,20 +95,16 @@ class DetectionOutline extends StatelessWidget {
   /// Configuration values for rendering detection outlines.
   final DetectionOutlineConfig outlineConfig;
 
-  DetectionOutline({
-    required this.boundingBoxes,
-    required this.detectionAreaBoundingBox,
-    required this.outlineConfig,
-  });
+  DetectionOutline({required this.boundingBoxes, required this.detectionAreaBoundingBox, required this.outlineConfig});
 
   @override
   Widget build(BuildContext context) => CustomPaint(
-        painter: _DetectionOutlinePainter(
-          boundingBoxes: boundingBoxes,
-          detectionAreaBoundingBox: detectionAreaBoundingBox,
-          outlineConfig: outlineConfig,
-        ),
-      );
+    painter: _DetectionOutlinePainter(
+      boundingBoxes: boundingBoxes,
+      detectionAreaBoundingBox: detectionAreaBoundingBox,
+      outlineConfig: outlineConfig,
+    ),
+  );
 }
 
 /// Paints detection boxes on screen.
@@ -148,18 +137,10 @@ class _DetectionOutlinePainter extends CustomPainter {
       detectionAreaBoundingBox.contains(boundingBox.bottomRight);
 
   /// Displays [text] at [labelPosition] of [rect].
-  void _paintOutlineLabel(
-    Canvas canvas,
-    Rect rect,
-    String text,
-    DetectionLabelPosition labelPosition,
-  ) {
+  void _paintOutlineLabel(Canvas canvas, Rect rect, String text, DetectionLabelPosition labelPosition) {
     final textSpan = TextSpan(
       text: text,
-      style: TextStyle(
-        color: outlineConfig.labelColor,
-        fontSize: outlineConfig.labelSize,
-      ),
+      style: TextStyle(color: outlineConfig.labelColor, fontSize: outlineConfig.labelSize),
     );
 
     final textPainter = TextPainter(
@@ -169,14 +150,7 @@ class _DetectionOutlinePainter extends CustomPainter {
     );
 
     textPainter.layout(minWidth: rect.right - rect.left);
-    textPainter.paint(
-      canvas,
-      labelPosition.offsetFromRect(
-        rect,
-        outlineConfig.labelSize,
-        outlineConfig.margin,
-      ),
-    );
+    textPainter.paint(canvas, labelPosition.offsetFromRect(rect, outlineConfig.labelSize, outlineConfig.margin));
   }
 
   @override
@@ -184,23 +158,16 @@ class _DetectionOutlinePainter extends CustomPainter {
     boundingBoxes.forEach((rect, value) {
       final paddedRect = rect.inflate(outlineConfig.padding);
 
-      _paint.color =
-          _isInDetectionArea(paddedRect) ? outlineConfig.activeOutlineColor : outlineConfig.inactiveOutlineColor;
+      _paint.color = _isInDetectionArea(paddedRect)
+          ? outlineConfig.activeOutlineColor
+          : outlineConfig.inactiveOutlineColor;
 
-      final roundedRect = RRect.fromRectAndRadius(
-        paddedRect,
-        Radius.circular(outlineConfig.cornerRadius),
-      );
+      final roundedRect = RRect.fromRectAndRadius(paddedRect, Radius.circular(outlineConfig.cornerRadius));
 
       canvas.drawRRect(roundedRect, _paint);
 
       if (outlineConfig.enableLabel) {
-        _paintOutlineLabel(
-          canvas,
-          paddedRect,
-          value,
-          outlineConfig.labelPosition,
-        );
+        _paintOutlineLabel(canvas, paddedRect, value, outlineConfig.labelPosition);
       }
     });
   }

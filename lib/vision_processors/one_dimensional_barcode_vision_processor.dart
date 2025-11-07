@@ -9,18 +9,11 @@ class OneDimensionalBarcodeVisionProcessor implements VisionProcessor {
   final _scanner = BarcodeScanner();
 
   @override
-  Future<Map<Rect, String?>> getBoundingBoxes({
-    required CameraImage image,
-    required int imageRotation,
-  }) async {
+  Future<Map<Rect, String?>> getBoundingBoxes({required CameraImage image, required int imageRotation}) async {
     final input = image.toInputImage(rotation: imageRotation);
     final value = await _scanner.processImage(input);
 
-    return Map.fromIterable(
-      value,
-      key: (barcode) => barcode.boundingBox,
-      value: (barcode) => _getText(barcode),
-    );
+    return Map.fromIterable(value, key: (barcode) => barcode.boundingBox, value: (barcode) => _getText(barcode));
   }
 
   /// Extract text from [barcode]. Returns `null` if [barcode] is not 1-D.

@@ -44,9 +44,7 @@ class _TorchToggleState extends State<TorchToggle> {
           onPressed: () => _updateTorch(),
           foregroundColor: Colors.transparent,
           backgroundColor: _torchOn ? Colors.white : Color.fromRGBO(0, 0, 0, 0.2),
-          shape: CircleBorder(
-            side: BorderSide(color: Colors.white),
-          ),
+          shape: CircleBorder(side: BorderSide(color: Colors.white)),
           elevation: 0,
           child: _torchOn ? FlashlightOnDrawable() : FlashlightOffDrawable(),
         ),
@@ -64,9 +62,7 @@ class _TorchToggleState extends State<TorchToggle> {
   /// In case of exception, set button back to disabled.
   Future<void> _toggleFlashMode() async {
     try {
-      await widget.cameraController.setFlashMode(
-        _torchOn ? FlashMode.torch : FlashMode.off,
-      );
+      await widget.cameraController.setFlashMode(_torchOn ? FlashMode.torch : FlashMode.off);
     } on CameraException catch (_) {
       setState(() => _torchOn = false);
     }

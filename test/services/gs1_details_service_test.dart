@@ -12,50 +12,35 @@ void main() {
 
   group('GS1DetailsService', () {
     group('extractGS1Values', () {
-      test(
-        'should return [] for gs1 codes with unknown type',
-        () async {
-          final testValues = ['(9999)761329948010399', '9999761329948010399', '123', 'ABCDEF', ''];
+      test('should return [] for gs1 codes with unknown type', () async {
+        final testValues = ['(9999)761329948010399', '9999761329948010399', '123', 'ABCDEF', ''];
 
-          testValues.forEach((testValue) => expect(service.extractGS1Values(testValue, GS1Type.unknown), []));
-        },
-      );
+        testValues.forEach((testValue) => expect(service.extractGS1Values(testValue, GS1Type.unknown), []));
+      });
 
-      test(
-        'should return filled List<GS1Description> for giai codes',
-        () async {
-          final testValues = [
-            '8004761329948010399',
-            '(8004)761329948010399',
-          ];
+      test('should return filled List<GS1Description> for giai codes', () async {
+        final testValues = ['8004761329948010399', '(8004)761329948010399'];
 
-          testValues.forEach((testValue) {
-            final results = service.extractGS1Values(testValue, GS1Type.giai);
-            expect(results, isA<List<GS1Description>>());
-            expect(results.length > 0, isTrue);
-          });
-        },
-      );
+        testValues.forEach((testValue) {
+          final results = service.extractGS1Values(testValue, GS1Type.giai);
+          expect(results, isA<List<GS1Description>>());
+          expect(results.length > 0, isTrue);
+        });
+      });
     });
 
     group('formatGS1', () {
-      test(
-        'should correctly format giai codes',
-        () async {
-          final testValues = [
-            '8004761329948010399',
-            '(8004)761329948010399',
-          ];
+      test('should correctly format giai codes', () async {
+        final testValues = ['8004761329948010399', '(8004)761329948010399'];
 
-          // (0000)0...
-          final format = RegExp(r'\(\d\d\d\d\)\d+');
+        // (0000)0...
+        final format = RegExp(r'\(\d\d\d\d\)\d+');
 
-          testValues.forEach((testValue) {
-            final result = service.formatGS1(testValue, type: GS1Type.giai);
-            expect(format.hasMatch(result), isTrue);
-          });
-        },
-      );
+        testValues.forEach((testValue) {
+          final result = service.formatGS1(testValue, type: GS1Type.giai);
+          expect(format.hasMatch(result), isTrue);
+        });
+      });
     });
   });
 }

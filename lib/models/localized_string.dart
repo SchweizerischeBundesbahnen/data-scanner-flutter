@@ -14,12 +14,7 @@ class LocalizedString {
   /// The English localization.
   final String en;
 
-  LocalizedString({
-    required this.de,
-    required this.fr,
-    required this.it,
-    required this.en,
-  });
+  LocalizedString({required this.de, required this.fr, required this.it, required this.en});
 
   /// Value corresponsing to the current language (`de`,`fr`,`it`) of [context].
   /// Requires a [Localizations] widget in scope. Returns the German value when

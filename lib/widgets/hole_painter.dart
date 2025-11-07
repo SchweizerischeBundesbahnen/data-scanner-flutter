@@ -42,7 +42,7 @@ class HolePainter extends CustomPainter {
   /// Draws the background with size [size] and cuts out a hole.
   void _paintBackgroundWithHole(Canvas canvas, Size size) {
     final paint = Paint();
-    paint.color = overlayColor.withOpacity(overlayColorOpacity);
+    paint.color = overlayColor.withValues(alpha: overlayColorOpacity);
     final background = Path()..addRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height));
     if (rect.height == 0 && rect.width == 0) {
       canvas.drawPath(background, paint);
@@ -67,10 +67,11 @@ class HolePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = borderWidth;
     canvas.drawPath(
-        Path()
-          ..addRRect(RRect.fromRectAndRadius(rect, Radius.circular(radius)))
-          ..close(),
-        whitePainter);
+      Path()
+        ..addRRect(RRect.fromRectAndRadius(rect, Radius.circular(radius)))
+        ..close(),
+      whitePainter,
+    );
   }
 
   @override

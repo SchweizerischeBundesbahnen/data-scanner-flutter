@@ -28,10 +28,7 @@ extension CameraImageX on CameraImage {
       bytesPerRow: planes.first.bytesPerRow,
     );
 
-    return InputImage.fromBytes(
-      bytes: bytes,
-      metadata: metadata,
-    );
+    return InputImage.fromBytes(bytes: bytes, metadata: metadata);
   }
 
   Uint8List getNv21Uint8List() {

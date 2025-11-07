@@ -27,13 +27,10 @@ void main() {
         {'testValue': '(9999)761329948010399', 'expected': false},
       ];
       testValues.forEach((testValue) {
-        test(
-          'should correctly validate [${testValue['testValue']}]',
-          () async {
-            final result = service.validate(testValue['testValue'] as String, GS1Type.giai);
-            expect(result, testValue['expected']);
-          },
-        );
+        test('should correctly validate [${testValue['testValue']}]', () async {
+          final result = service.validate(testValue['testValue'] as String, GS1Type.giai);
+          expect(result, testValue['expected']);
+        });
       });
     });
   });

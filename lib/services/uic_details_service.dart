@@ -9,10 +9,7 @@ class UICDetailsService {
   /// Splits a 12-digit [uic] into its [UICDetails]. [category] defaults to
   /// [UICCategory.passengerCoach]. Returns an empty list for non-12-digit
   /// UIC numbers.
-  List<UICDescription> extractUICValues(
-    String uic, [
-    UICCategory category = UICCategory.passengerCoach,
-  ]) {
+  List<UICDescription> extractUICValues(String uic, [UICCategory category = UICCategory.passengerCoach]) {
     final onlyDigits = uic.replaceAll(_everythingExceptDigits, '');
     if (onlyDigits.length < 12) return [];
     switch (category) {
@@ -246,90 +243,20 @@ class _TractionUnitUICValues {
   };
 
   static Map<String, LocalizedString> digits3And4 = {
-    '70': LocalizedString(
-      de: 'Grossbritannien',
-      fr: 'Grande-Bretagne',
-      it: 'Gran Bretagna',
-      en: "Great Britain",
-    ),
-    '71': LocalizedString(
-      de: 'Spanien',
-      fr: 'Espagne',
-      it: 'Spagna',
-      en: "Spain",
-    ),
-    '74': LocalizedString(
-      de: 'Schweden',
-      fr: 'Suède',
-      it: 'Svezia',
-      en: "Sweden",
-    ),
-    '76': LocalizedString(
-      de: 'Norwegen',
-      fr: 'Norvège',
-      it: 'Norvegia',
-      en: "Norway",
-    ),
-    '80': LocalizedString(
-      de: 'Deutschland',
-      fr: 'Allemagne',
-      it: 'Germania',
-      en: "Germany",
-    ),
-    '81': LocalizedString(
-      de: 'Österreich',
-      fr: 'Autriche',
-      it: 'Austria',
-      en: "Austria",
-    ),
-    '82': LocalizedString(
-      de: 'Luxemburg',
-      fr: 'Luxembourg',
-      it: 'Lussemburgo',
-      en: "Luxembourg",
-    ),
-    '83': LocalizedString(
-      de: 'Italien',
-      fr: 'Italie',
-      it: 'Italia',
-      en: "Italy",
-    ),
-    '84': LocalizedString(
-      de: 'Niederlande',
-      fr: 'Paysbas',
-      it: 'Olanda',
-      en: "Netherlands",
-    ),
-    '85': LocalizedString(
-      de: 'Schweiz',
-      fr: 'Suisse',
-      it: 'Svizzera',
-      en: "Switzerland",
-    ),
-    '86': LocalizedString(
-      de: 'Dänemark',
-      fr: 'Danemark',
-      it: 'Danimarca',
-      en: "Denmark",
-    ),
-    '87': LocalizedString(
-      de: 'Frankreich',
-      fr: 'France',
-      it: 'Francia',
-      en: "France",
-    ),
-    '88': LocalizedString(
-      de: 'Belgien',
-      fr: 'Belgique',
-      it: 'Belgio',
-      en: "Belgium",
-    ),
-    '93': LocalizedString(
-      de: 'Portugal',
-      fr: 'Portugal',
-      it: 'Portogallo',
-      en: "Portugal",
-    ),
+    '70': LocalizedString(de: 'Grossbritannien', fr: 'Grande-Bretagne', it: 'Gran Bretagna', en: "Great Britain"),
+    '71': LocalizedString(de: 'Spanien', fr: 'Espagne', it: 'Spagna', en: "Spain"),
+    '74': LocalizedString(de: 'Schweden', fr: 'Suède', it: 'Svezia', en: "Sweden"),
+    '76': LocalizedString(de: 'Norwegen', fr: 'Norvège', it: 'Norvegia', en: "Norway"),
+    '80': LocalizedString(de: 'Deutschland', fr: 'Allemagne', it: 'Germania', en: "Germany"),
+    '81': LocalizedString(de: 'Österreich', fr: 'Autriche', it: 'Austria', en: "Austria"),
+    '82': LocalizedString(de: 'Luxemburg', fr: 'Luxembourg', it: 'Lussemburgo', en: "Luxembourg"),
+    '83': LocalizedString(de: 'Italien', fr: 'Italie', it: 'Italia', en: "Italy"),
+    '84': LocalizedString(de: 'Niederlande', fr: 'Paysbas', it: 'Olanda', en: "Netherlands"),
+    '85': LocalizedString(de: 'Schweiz', fr: 'Suisse', it: 'Svizzera', en: "Switzerland"),
+    '86': LocalizedString(de: 'Dänemark', fr: 'Danemark', it: 'Danimarca', en: "Denmark"),
+    '87': LocalizedString(de: 'Frankreich', fr: 'France', it: 'Francia', en: "France"),
+    '88': LocalizedString(de: 'Belgien', fr: 'Belgique', it: 'Belgio', en: "Belgium"),
+    '93': LocalizedString(de: 'Portugal', fr: 'Portugal', it: 'Portogallo', en: "Portugal"),
   };
 
   static LocalizedString digit5 = LocalizedString(
@@ -396,225 +323,55 @@ class _PassengerWagonUICValues {
   };
 
   static Map<String, LocalizedString> digits3And4 = {
-    '70': LocalizedString(
-      de: 'Grossbritannien',
-      fr: 'Grande-Bretagne',
-      it: 'Gran Bretagna',
-      en: "Great Britain",
-    ),
-    '71': LocalizedString(
-      de: 'Spanien',
-      fr: 'Espagne',
-      it: 'Spagna',
-      en: "Spain",
-    ),
-    '74': LocalizedString(
-      de: 'Schweden',
-      fr: 'Suède',
-      it: 'Svezia',
-      en: "Sweden",
-    ),
-    '76': LocalizedString(
-      de: 'Norwegen',
-      fr: 'Norvège',
-      it: 'Norvegia',
-      en: "Norway",
-    ),
-    '80': LocalizedString(
-      de: 'Deutschland',
-      fr: 'Allemagne',
-      it: 'Germania',
-      en: "Germany",
-    ),
-    '81': LocalizedString(
-      de: 'Österreich',
-      fr: 'Autriche',
-      it: 'Austria',
-      en: "Austria",
-    ),
-    '82': LocalizedString(
-      de: 'Luxemburg',
-      fr: 'Luxembourg',
-      it: 'Lussemburgo',
-      en: "Luxembourg",
-    ),
-    '83': LocalizedString(
-      de: 'Italien',
-      fr: 'Italie',
-      it: 'Italia',
-      en: "Italy",
-    ),
-    '84': LocalizedString(
-      de: 'Niederlande',
-      fr: 'Pays bas',
-      it: 'Olanda',
-      en: "Netherlands",
-    ),
-    '85': LocalizedString(
-      de: 'Schweiz',
-      fr: 'Suisse',
-      it: 'Svizzera',
-      en: "Switzerland",
-    ),
-    '86': LocalizedString(
-      de: 'Dänemark',
-      fr: 'Danemark',
-      it: 'Danimarca',
-      en: "Denmark",
-    ),
-    '87': LocalizedString(
-      de: 'Frankreich',
-      fr: 'France',
-      it: 'Francia',
-      en: "France",
-    ),
-    '88': LocalizedString(
-      de: 'Belgien',
-      fr: 'Belgique',
-      it: 'Belgio',
-      en: "Belgium",
-    ),
-    '93': LocalizedString(
-      de: 'Portugal',
-      fr: 'Portugal',
-      it: 'Portogallo',
-      en: "Portugal",
-    ),
+    '70': LocalizedString(de: 'Grossbritannien', fr: 'Grande-Bretagne', it: 'Gran Bretagna', en: "Great Britain"),
+    '71': LocalizedString(de: 'Spanien', fr: 'Espagne', it: 'Spagna', en: "Spain"),
+    '74': LocalizedString(de: 'Schweden', fr: 'Suède', it: 'Svezia', en: "Sweden"),
+    '76': LocalizedString(de: 'Norwegen', fr: 'Norvège', it: 'Norvegia', en: "Norway"),
+    '80': LocalizedString(de: 'Deutschland', fr: 'Allemagne', it: 'Germania', en: "Germany"),
+    '81': LocalizedString(de: 'Österreich', fr: 'Autriche', it: 'Austria', en: "Austria"),
+    '82': LocalizedString(de: 'Luxemburg', fr: 'Luxembourg', it: 'Lussemburgo', en: "Luxembourg"),
+    '83': LocalizedString(de: 'Italien', fr: 'Italie', it: 'Italia', en: "Italy"),
+    '84': LocalizedString(de: 'Niederlande', fr: 'Pays bas', it: 'Olanda', en: "Netherlands"),
+    '85': LocalizedString(de: 'Schweiz', fr: 'Suisse', it: 'Svizzera', en: "Switzerland"),
+    '86': LocalizedString(de: 'Dänemark', fr: 'Danemark', it: 'Danimarca', en: "Denmark"),
+    '87': LocalizedString(de: 'Frankreich', fr: 'France', it: 'Francia', en: "France"),
+    '88': LocalizedString(de: 'Belgien', fr: 'Belgique', it: 'Belgio', en: "Belgium"),
+    '93': LocalizedString(de: 'Portugal', fr: 'Portugal', it: 'Portogallo', en: "Portugal"),
   };
 
   static Map<String, LocalizedString> digit5 = {
-    '0': LocalizedString(
-      de: 'Privatwagen',
-      fr: 'Voiture de privés',
-      it: 'Carrozze private',
-      en: "Private car",
-    ),
-    '1': LocalizedString(
-      de: 'A-Wagen',
-      fr: 'Voiture A',
-      it: 'Veicolo A',
-      en: "A coach",
-    ),
-    '2': LocalizedString(
-      de: 'B-Wagen',
-      fr: 'Voiture B',
-      it: 'Veicolo B',
-      en: "B coach",
-    ),
-    '3': LocalizedString(
-      de: 'AB-Wagen',
-      fr: 'Voiture AB',
-      it: 'Veicolo AB',
-      en: "AB coach",
-    ),
+    '0': LocalizedString(de: 'Privatwagen', fr: 'Voiture de privés', it: 'Carrozze private', en: "Private car"),
+    '1': LocalizedString(de: 'A-Wagen', fr: 'Voiture A', it: 'Veicolo A', en: "A coach"),
+    '2': LocalizedString(de: 'B-Wagen', fr: 'Voiture B', it: 'Veicolo B', en: "B coach"),
+    '3': LocalizedString(de: 'AB-Wagen', fr: 'Voiture AB', it: 'Veicolo AB', en: "AB coach"),
   };
 
   static Map<String, LocalizedString> digit6 = {
-    '0': LocalizedString(
-      de: '10 Abteile',
-      fr: '10 compartiments',
-      it: '10 scompartimenti',
-      en: "10 compartments",
-    ),
-    '1': LocalizedString(
-      de: '11 Abteile',
-      fr: '11 compartiments',
-      it: '11 scompartimenti',
-      en: "11 compartments",
-    ),
-    '2': LocalizedString(
-      de: '12 Abteile',
-      fr: '12 compartiments',
-      it: '12 scompartimenti',
-      en: "12 compartments",
-    ),
+    '0': LocalizedString(de: '10 Abteile', fr: '10 compartiments', it: '10 scompartimenti', en: "10 compartments"),
+    '1': LocalizedString(de: '11 Abteile', fr: '11 compartiments', it: '11 scompartimenti', en: "11 compartments"),
+    '2': LocalizedString(de: '12 Abteile', fr: '12 compartiments', it: '12 scompartimenti', en: "12 compartments"),
     '6': LocalizedString(
       de: 'Doppelstockwagen',
       fr: 'Voitures à 2 étages',
       it: 'Carrozze a due piani',
       en: "Double-decker coach",
     ),
-    '7': LocalizedString(
-      de: '7 Abteile',
-      fr: '7 compartiments',
-      it: '7 scompartimenti',
-      en: "7 compartments",
-    ),
-    '8': LocalizedString(
-      de: '8 Abteile',
-      fr: '8 compartiments',
-      it: '8 scompartimenti',
-      en: "8 compartments",
-    ),
-    '9': LocalizedString(
-      de: '9 Abteile',
-      fr: '9 compartiments',
-      it: '9 scompartimenti',
-      en: "9 compartments",
-    ),
+    '7': LocalizedString(de: '7 Abteile', fr: '7 compartiments', it: '7 scompartimenti', en: "7 compartments"),
+    '8': LocalizedString(de: '8 Abteile', fr: '8 compartiments', it: '8 scompartimenti', en: "8 compartments"),
+    '9': LocalizedString(de: '9 Abteile', fr: '9 compartiments', it: '9 scompartimenti', en: "9 compartments"),
   };
 
   static Map<String, LocalizedString> digit7 = {
-    '0': LocalizedString(
-      de: 'Vmax 120 km/h',
-      fr: 'Vmax 120 km/h',
-      it: 'Vmax 120 km/h',
-      en: "Vmax 120 km/h",
-    ),
-    '1': LocalizedString(
-      de: 'Vmax 120 km/h',
-      fr: 'Vmax 120 km/h',
-      it: 'Vmax 120 km/h',
-      en: "Vmax 120 km/h",
-    ),
-    '2': LocalizedString(
-      de: 'Vmax 120 km/h',
-      fr: 'Vmax 120 km/h',
-      it: 'Vmax 120 km/h',
-      en: "Vmax 120 km/h",
-    ),
-    '3': LocalizedString(
-      de: 'Vmax 140 km/h',
-      fr: 'Vmax 140 km/h',
-      it: 'Vmax 140 km/h',
-      en: "Vmax 140 km/h",
-    ),
-    '4': LocalizedString(
-      de: 'Vmax 140 km/h',
-      fr: 'Vmax 140 km/h',
-      it: 'Vmax 140 km/h',
-      en: "Vmax 140 km/h",
-    ),
-    '5': LocalizedString(
-      de: 'Vmax 140 km/h',
-      fr: 'Vmax 140 km/h',
-      it: 'Vmax 140 km/h',
-      en: "Vmax 140 km/h",
-    ),
-    '6': LocalizedString(
-      de: 'Vmax 140 km/h',
-      fr: 'Vmax 140 km/h',
-      it: 'Vmax 140 km/h',
-      en: "Vmax 140 km/h",
-    ),
-    '7': LocalizedString(
-      de: 'Vmax 160 km/h',
-      fr: 'Vmax 160 km/h',
-      it: 'Vmax 160 km/h',
-      en: "Vmax 160 km/h",
-    ),
-    '8': LocalizedString(
-      de: 'Vmax 160 km/h',
-      fr: 'Vmax 160 km/h',
-      it: 'Vmax 160 km/h',
-      en: "Vmax 160 km/h",
-    ),
-    '9': LocalizedString(
-      de: 'Vmax 200 km/h',
-      fr: 'Vmax 200 km/h',
-      it: 'Vmax 200 km/h',
-      en: "Vmax 200 km/h",
-    ),
+    '0': LocalizedString(de: 'Vmax 120 km/h', fr: 'Vmax 120 km/h', it: 'Vmax 120 km/h', en: "Vmax 120 km/h"),
+    '1': LocalizedString(de: 'Vmax 120 km/h', fr: 'Vmax 120 km/h', it: 'Vmax 120 km/h', en: "Vmax 120 km/h"),
+    '2': LocalizedString(de: 'Vmax 120 km/h', fr: 'Vmax 120 km/h', it: 'Vmax 120 km/h', en: "Vmax 120 km/h"),
+    '3': LocalizedString(de: 'Vmax 140 km/h', fr: 'Vmax 140 km/h', it: 'Vmax 140 km/h', en: "Vmax 140 km/h"),
+    '4': LocalizedString(de: 'Vmax 140 km/h', fr: 'Vmax 140 km/h', it: 'Vmax 140 km/h', en: "Vmax 140 km/h"),
+    '5': LocalizedString(de: 'Vmax 140 km/h', fr: 'Vmax 140 km/h', it: 'Vmax 140 km/h', en: "Vmax 140 km/h"),
+    '6': LocalizedString(de: 'Vmax 140 km/h', fr: 'Vmax 140 km/h', it: 'Vmax 140 km/h', en: "Vmax 140 km/h"),
+    '7': LocalizedString(de: 'Vmax 160 km/h', fr: 'Vmax 160 km/h', it: 'Vmax 160 km/h', en: "Vmax 160 km/h"),
+    '8': LocalizedString(de: 'Vmax 160 km/h', fr: 'Vmax 160 km/h', it: 'Vmax 160 km/h', en: "Vmax 160 km/h"),
+    '9': LocalizedString(de: 'Vmax 200 km/h', fr: 'Vmax 200 km/h', it: 'Vmax 200 km/h', en: "Vmax 200 km/h"),
   };
 
   static Map<String, LocalizedString> digit8 = {
@@ -694,12 +451,7 @@ class _FreightWagonUICValues {
   };
 
   static Map<String, LocalizedString> digit2 = {
-    '0': LocalizedString(
-      de: 'Dienstwagen',
-      fr: "Wagon d'entreprise",
-      it: "Vagoni d'azienda",
-      en: "Company wagon",
-    ),
+    '0': LocalizedString(de: 'Dienstwagen', fr: "Wagon d'entreprise", it: "Vagoni d'azienda", en: "Company wagon"),
     '1': LocalizedString(
       de: 'Bahneigener Wagen',
       fr: 'Wagon des chemin de fer',
@@ -712,18 +464,8 @@ class _FreightWagonUICValues {
       it: 'Vagoni delle ferrovie',
       en: "Railway wagon",
     ),
-    '3': LocalizedString(
-      de: 'Privater Wagen',
-      fr: 'Wagon privé',
-      it: 'Vagoni privati',
-      en: "Private wagon",
-    ),
-    '4': LocalizedString(
-      de: 'Privater Wagen',
-      fr: 'Wagon privé',
-      it: 'Vagoni privati',
-      en: "Private wagon",
-    ),
+    '3': LocalizedString(de: 'Privater Wagen', fr: 'Wagon privé', it: 'Vagoni privati', en: "Private wagon"),
+    '4': LocalizedString(de: 'Privater Wagen', fr: 'Wagon privé', it: 'Vagoni privati', en: "Private wagon"),
     '5': LocalizedString(
       de: 'Vermieteter Privatwagen',
       fr: 'Wagon privé pour location',
@@ -739,144 +481,29 @@ class _FreightWagonUICValues {
   };
 
   static Map<String, LocalizedString> digits3And4 = {
-    '10': LocalizedString(
-      de: 'Finnland',
-      fr: 'Finlande',
-      it: 'Finlandia',
-      en: "Finland",
-    ),
-    '20': LocalizedString(
-      de: 'Russland',
-      fr: 'Russie',
-      it: 'Russia',
-      en: "Russia",
-    ),
-    '41': LocalizedString(
-      de: 'Albanien',
-      fr: 'Albanie',
-      it: 'Albania',
-      en: "Albania",
-    ),
-    '54': LocalizedString(
-      de: 'Tschechien',
-      fr: 'Cechie',
-      it: 'Ceca',
-      en: "Czech Republic",
-    ),
-    '55': LocalizedString(
-      de: 'Ungarn',
-      fr: 'Hongrie',
-      it: 'Ungheria',
-      en: "Hungary",
-    ),
-    '56': LocalizedString(
-      de: 'Slowakei',
-      fr: 'Slovaquie',
-      it: 'Slovacchia',
-      en: "Slovakia",
-    ),
-    '70': LocalizedString(
-      de: 'UK',
-      fr: 'Grande-Bretagne',
-      it: 'Gran Bretagna',
-      en: "UK",
-    ),
-    '71': LocalizedString(
-      de: 'Spanien',
-      fr: 'Espagne',
-      it: 'Spagna',
-      en: "Spain",
-    ),
-    '73': LocalizedString(
-      de: 'Griechenland',
-      fr: 'Grèce',
-      it: 'Grecia',
-      en: "Greece",
-    ),
-    '74': LocalizedString(
-      de: 'Schweden',
-      fr: 'Suède',
-      it: 'Svezia',
-      en: "Sweden",
-    ),
-    '76': LocalizedString(
-      de: 'Norwegen',
-      fr: 'Norvège',
-      it: 'Norvegia',
-      en: "Norway",
-    ),
-    '78': LocalizedString(
-      de: 'Kroatien',
-      fr: 'Croatie',
-      it: 'Croazia',
-      en: "Croatia",
-    ),
-    '79': LocalizedString(
-      de: 'Slowenien',
-      fr: 'Slovaquie',
-      it: 'Slovenia',
-      en: "Slovenia",
-    ),
-    '80': LocalizedString(
-      de: 'Deutschland',
-      fr: 'Allemagne',
-      it: 'Germania',
-      en: "Germany",
-    ),
-    '81': LocalizedString(
-      de: 'Österreich',
-      fr: 'Autriche',
-      it: 'Austria',
-      en: "Austria",
-    ),
-    '82': LocalizedString(
-      de: 'Luxemburg',
-      fr: 'Luxembourg',
-      it: 'Lussemburgo',
-      en: "Luxembourg",
-    ),
-    '83': LocalizedString(
-      de: 'Italien',
-      fr: 'Italie',
-      it: 'Italia',
-      en: "Italy",
-    ),
-    '84': LocalizedString(
-      de: 'Niederlande',
-      fr: 'Pays bas',
-      it: 'Olanda',
-      en: "Netherlands",
-    ),
-    '85': LocalizedString(
-      de: 'Schweiz',
-      fr: 'Suisse',
-      it: 'Svizzera',
-      en: "Switzerland",
-    ),
-    '86': LocalizedString(
-      de: 'Dänemark',
-      fr: 'Danemark',
-      it: 'Danimarca',
-      en: "Denmark",
-    ),
-    '87': LocalizedString(
-      de: 'Frankreich',
-      fr: 'France',
-      it: 'Francia',
-      en: "France",
-    ),
-    '88': LocalizedString(
-      de: 'Belgien',
-      fr: 'Belgique',
-      it: 'Belgio',
-      en: "Belgium",
-    ),
-    '93': LocalizedString(
-      de: 'Portugal',
-      fr: 'Portugal',
-      it: 'Portogallo',
-      en: "Portugal",
-    ),
+    '10': LocalizedString(de: 'Finnland', fr: 'Finlande', it: 'Finlandia', en: "Finland"),
+    '20': LocalizedString(de: 'Russland', fr: 'Russie', it: 'Russia', en: "Russia"),
+    '41': LocalizedString(de: 'Albanien', fr: 'Albanie', it: 'Albania', en: "Albania"),
+    '54': LocalizedString(de: 'Tschechien', fr: 'Cechie', it: 'Ceca', en: "Czech Republic"),
+    '55': LocalizedString(de: 'Ungarn', fr: 'Hongrie', it: 'Ungheria', en: "Hungary"),
+    '56': LocalizedString(de: 'Slowakei', fr: 'Slovaquie', it: 'Slovacchia', en: "Slovakia"),
+    '70': LocalizedString(de: 'UK', fr: 'Grande-Bretagne', it: 'Gran Bretagna', en: "UK"),
+    '71': LocalizedString(de: 'Spanien', fr: 'Espagne', it: 'Spagna', en: "Spain"),
+    '73': LocalizedString(de: 'Griechenland', fr: 'Grèce', it: 'Grecia', en: "Greece"),
+    '74': LocalizedString(de: 'Schweden', fr: 'Suède', it: 'Svezia', en: "Sweden"),
+    '76': LocalizedString(de: 'Norwegen', fr: 'Norvège', it: 'Norvegia', en: "Norway"),
+    '78': LocalizedString(de: 'Kroatien', fr: 'Croatie', it: 'Croazia', en: "Croatia"),
+    '79': LocalizedString(de: 'Slowenien', fr: 'Slovaquie', it: 'Slovenia', en: "Slovenia"),
+    '80': LocalizedString(de: 'Deutschland', fr: 'Allemagne', it: 'Germania', en: "Germany"),
+    '81': LocalizedString(de: 'Österreich', fr: 'Autriche', it: 'Austria', en: "Austria"),
+    '82': LocalizedString(de: 'Luxemburg', fr: 'Luxembourg', it: 'Lussemburgo', en: "Luxembourg"),
+    '83': LocalizedString(de: 'Italien', fr: 'Italie', it: 'Italia', en: "Italy"),
+    '84': LocalizedString(de: 'Niederlande', fr: 'Pays bas', it: 'Olanda', en: "Netherlands"),
+    '85': LocalizedString(de: 'Schweiz', fr: 'Suisse', it: 'Svizzera', en: "Switzerland"),
+    '86': LocalizedString(de: 'Dänemark', fr: 'Danemark', it: 'Danimarca', en: "Denmark"),
+    '87': LocalizedString(de: 'Frankreich', fr: 'France', it: 'Francia', en: "France"),
+    '88': LocalizedString(de: 'Belgien', fr: 'Belgique', it: 'Belgio', en: "Belgium"),
+    '93': LocalizedString(de: 'Portugal', fr: 'Portugal', it: 'Portogallo', en: "Portugal"),
   };
 
   static LocalizedString digits5to8 = LocalizedString(

@@ -35,12 +35,7 @@ class UICDetails {
   /// non-12-digit UIC number.
   final List<UICDescription> descriptions;
 
-  UICDetails({
-    required this.uicNumber,
-    required this.descriptions,
-    required this.uicType,
-    this.uicCategory,
-  });
+  UICDetails({required this.uicNumber, required this.descriptions, required this.uicType, this.uicCategory});
 
   /// Prints an object string. Use this instead of [UICDetails.toString].
   String toObjectString() => '{uicNumber: $uicNumber, uicValues: $descriptions}';

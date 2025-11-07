@@ -23,9 +23,7 @@ class DataScannerExample extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({
-    Key? key,
-  }) : super(key: key);
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -41,12 +39,8 @@ class _MainPageState extends State<MainPage> {
   final OneDimensionalBarcodeVisionProcessor _oneDimensionalBarcodeProcessor = OneDimensionalBarcodeVisionProcessor();
 
   final _rawTextExtractor = RawTextExtractor();
-  final _uicDetailsStrictExtractor = UICDetailsExtractor(
-    uicDetectionMode: UICDetectionMode.strict,
-  );
-  final _uicDetailsLooseExtractor = UICDetailsExtractor(
-    uicDetectionMode: UICDetectionMode.loose,
-  );
+  final _uicDetailsStrictExtractor = UICDetailsExtractor(uicDetectionMode: UICDetectionMode.strict);
+  final _uicDetailsLooseExtractor = UICDetailsExtractor(uicDetectionMode: UICDetectionMode.loose);
   final _gs1DetailsExtractor = GS1DetailsExtractor();
   late Extractor _extractor = _rawTextExtractor;
 
@@ -61,12 +55,8 @@ class _MainPageState extends State<MainPage> {
   Size _scannerSize = Size(0, 0);
   Size _detectionAreaSize = Size(250, 50);
 
-  TextEditingController _upperHelperTextController = TextEditingController(
-    text: 'Point your camera at something',
-  );
-  TextEditingController _lowerHelperTextController = TextEditingController(
-    text: 'lower helper example',
-  );
+  TextEditingController _upperHelperTextController = TextEditingController(text: 'Point your camera at something');
+  TextEditingController _lowerHelperTextController = TextEditingController(text: 'lower helper example');
 
   bool _showDetectionLabels = true;
   bool _showOverlay = true;
@@ -94,9 +84,7 @@ class _MainPageState extends State<MainPage> {
       showOverlay: _showOverlay,
       showTorchToggle: _showTorchToggle,
       torchToggleAlignment: Alignment.bottomRight,
-      detectionOutline: DetectionOutlineConfig(
-        enableLabel: _showDetectionLabels,
-      ),
+      detectionOutline: DetectionOutlineConfig(enableLabel: _showDetectionLabels),
       enableZoom: _enableZoom,
     );
 
@@ -104,17 +92,16 @@ class _MainPageState extends State<MainPage> {
       appBar: SBBHeader(title: 'Data Scanner Example'),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Column(children: [
-            SizedBox(height: _spacing),
-            _configurationOptions(context),
-            SizedBox(height: _spacing * 2),
-            _scannerToggleButton(),
-            if (!_fullscreenSelected() && _scannerActive) ...[
+          child: Column(
+            children: [
+              SizedBox(height: _spacing),
+              _configurationOptions(context),
               SizedBox(height: _spacing * 2),
-              _inlineScanner(),
+              _scannerToggleButton(),
+              if (!_fullscreenSelected() && _scannerActive) ...[SizedBox(height: _spacing * 2), _inlineScanner()],
+              SizedBox(height: _spacing * 4),
             ],
-            SizedBox(height: _spacing * 4),
-          ]),
+          ),
         ),
       ),
     );
@@ -140,12 +127,9 @@ class _MainPageState extends State<MainPage> {
         padding: EdgeInsets.only(left: _spacing, bottom: _spacing / 2),
       ),
       SBBGroup(
-        child: Column(children: [
-          _processorEnablers(),
-          _extractorSelector(),
-          _detectionAreaModeSelector(),
-          _zoomEnabler(),
-        ]),
+        child: Column(
+          children: [_processorEnablers(), _extractorSelector(), _detectionAreaModeSelector(), _zoomEnabler()],
+        ),
       ),
     ];
   }
@@ -157,48 +141,44 @@ class _MainPageState extends State<MainPage> {
         padding: EdgeInsets.only(left: _spacing, bottom: _spacing / 2),
       ),
       SBBGroup(
-        child: Column(children: [
-          _detectionLabelEnabler(),
-          _overlayEnabler(),
-          _torchToggleEnabler(),
-          _scannerSizeSelector(context),
-          _detectionAreaSizeSelector(),
-          _upperHelperTextInput(),
-          _lowerHelperTextInput(),
-        ]),
+        child: Column(
+          children: [
+            _detectionLabelEnabler(),
+            _overlayEnabler(),
+            _torchToggleEnabler(),
+            _scannerSizeSelector(context),
+            _detectionAreaSizeSelector(),
+            _upperHelperTextInput(),
+            _lowerHelperTextInput(),
+          ],
+        ),
       ),
     ];
   }
 
   Widget _processorEnablers() {
-    return Column(children: [
-      SBBCheckboxListItem(
-        value: _detectText,
-        label: 'Enable text recognition',
-        secondaryLabel: 'Will detect text in the Latin script.',
-        onChanged: _scannerActive ? null : (enabled) => setState(() => _detectText = enabled!),
-      ),
-      SBBCheckboxListItem(
-        value: _detectOneDimensionalBarcodes,
-        label: 'Enable 1-D barcode scanning',
-        secondaryLabel: 'Will detect one-dimensional barcodes, such as you would scan in the store.',
-        onChanged: _scannerActive
-            ? null
-            : (enabled) => setState(
-                  () => _detectOneDimensionalBarcodes = enabled!,
-                ),
-      ),
-      SBBCheckboxListItem(
-        value: _detectTwoDimensionalBarcodes,
-        label: 'Enable 2-D barcode scanning',
-        secondaryLabel: 'Will detect two-dimensional barcodes, such as classic QR codes or data matrices.',
-        onChanged: _scannerActive
-            ? null
-            : (enabled) => setState(
-                  () => _detectTwoDimensionalBarcodes = enabled!,
-                ),
-      ),
-    ]);
+    return Column(
+      children: [
+        SBBCheckboxListItem(
+          value: _detectText,
+          label: 'Enable text recognition',
+          secondaryLabel: 'Will detect text in the Latin script.',
+          onChanged: _scannerActive ? null : (enabled) => setState(() => _detectText = enabled!),
+        ),
+        SBBCheckboxListItem(
+          value: _detectOneDimensionalBarcodes,
+          label: 'Enable 1-D barcode scanning',
+          secondaryLabel: 'Will detect one-dimensional barcodes, such as you would scan in the store.',
+          onChanged: _scannerActive ? null : (enabled) => setState(() => _detectOneDimensionalBarcodes = enabled!),
+        ),
+        SBBCheckboxListItem(
+          value: _detectTwoDimensionalBarcodes,
+          label: 'Enable 2-D barcode scanning',
+          secondaryLabel: 'Will detect two-dimensional barcodes, such as classic QR codes or data matrices.',
+          onChanged: _scannerActive ? null : (enabled) => setState(() => _detectTwoDimensionalBarcodes = enabled!),
+        ),
+      ],
+    );
   }
 
   Widget _extractorSelector() {
@@ -208,22 +188,10 @@ class _MainPageState extends State<MainPage> {
       isLastElement: false,
       onChanged: _scannerActive ? null : (extractor) => setState(() => _extractor = extractor!),
       items: [
-        SelectMenuItem(
-          value: _rawTextExtractor,
-          label: 'Raw text',
-        ),
-        SelectMenuItem(
-          value: _uicDetailsStrictExtractor,
-          label: 'UIC number (strict)',
-        ),
-        SelectMenuItem(
-          value: _uicDetailsLooseExtractor,
-          label: 'UIC number (loose)',
-        ),
-        SelectMenuItem(
-          value: _gs1DetailsExtractor,
-          label: 'GS1',
-        ),
+        SelectMenuItem(value: _rawTextExtractor, label: 'Raw text'),
+        SelectMenuItem(value: _uicDetailsStrictExtractor, label: 'UIC number (strict)'),
+        SelectMenuItem(value: _uicDetailsLooseExtractor, label: 'UIC number (loose)'),
+        SelectMenuItem(value: _gs1DetailsExtractor, label: 'GS1'),
       ],
     );
   }
@@ -235,22 +203,10 @@ class _MainPageState extends State<MainPage> {
       isLastElement: true,
       onChanged: _scannerActive ? null : (mode) => setState(() => _detectionAreaMode = mode!),
       items: [
-        SelectMenuItem(
-          value: DetectionAreaMode.containsRect,
-          label: 'Element fully contained',
-        ),
-        SelectMenuItem(
-          value: DetectionAreaMode.intersects,
-          label: 'Element intersecting',
-        ),
-        SelectMenuItem(
-          value: DetectionAreaMode.containsHorizontally,
-          label: 'Element within horizontal bounds',
-        ),
-        SelectMenuItem(
-          value: DetectionAreaMode.containsVertically,
-          label: 'Element within vertical bounds',
-        ),
+        SelectMenuItem(value: DetectionAreaMode.containsRect, label: 'Element fully contained'),
+        SelectMenuItem(value: DetectionAreaMode.intersects, label: 'Element intersecting'),
+        SelectMenuItem(value: DetectionAreaMode.containsHorizontally, label: 'Element within horizontal bounds'),
+        SelectMenuItem(value: DetectionAreaMode.containsVertically, label: 'Element within vertical bounds'),
       ],
     );
   }
@@ -260,11 +216,7 @@ class _MainPageState extends State<MainPage> {
       label: 'Enable zoom',
       secondaryLabel: 'Displays the zoom level and enables zoom though pinch gesture.',
       value: _enableZoom,
-      onChanged: _scannerActive
-          ? null
-          : (enabled) => setState(
-                () => _enableZoom = enabled ?? false,
-              ),
+      onChanged: _scannerActive ? null : (enabled) => setState(() => _enableZoom = enabled ?? false),
     );
   }
 
@@ -273,11 +225,7 @@ class _MainPageState extends State<MainPage> {
       label: 'Enable detection labels',
       secondaryLabel: 'Displays the contained value when highlighting a detected element.',
       value: _showDetectionLabels,
-      onChanged: _scannerActive
-          ? null
-          : (enabled) => setState(
-                () => _showDetectionLabels = enabled ?? false,
-              ),
+      onChanged: _scannerActive ? null : (enabled) => setState(() => _showDetectionLabels = enabled ?? false),
     );
   }
 
@@ -286,11 +234,7 @@ class _MainPageState extends State<MainPage> {
       label: 'Enable overlay',
       secondaryLabel: 'Darkens the area outside of whats being detected and shows the helper text.',
       value: _showOverlay,
-      onChanged: _scannerActive
-          ? null
-          : (enabled) => setState(
-                () => _showOverlay = enabled ?? false,
-              ),
+      onChanged: _scannerActive ? null : (enabled) => setState(() => _showOverlay = enabled ?? false),
     );
   }
 
@@ -300,11 +244,7 @@ class _MainPageState extends State<MainPage> {
       secondaryLabel: 'Shows a button to toggle the torch.',
       value: _showTorchToggle,
       isLastElement: true,
-      onChanged: _scannerActive
-          ? null
-          : (enabled) => setState(
-                () => _showTorchToggle = enabled ?? false,
-              ),
+      onChanged: _scannerActive ? null : (enabled) => setState(() => _showTorchToggle = enabled ?? false),
     );
   }
 
@@ -317,22 +257,10 @@ class _MainPageState extends State<MainPage> {
       value: _scannerSize,
       onChanged: _scannerActive ? null : (size) => setState(() => _scannerSize = size!),
       items: [
-        SelectMenuItem(
-          value: Size(0, 0),
-          label: 'Fullscreen',
-        ),
-        SelectMenuItem(
-          value: Size(0, 250),
-          label: 'Inline, wide',
-        ),
-        SelectMenuItem(
-          value: Size(squareSize, squareSize),
-          label: 'Inline, square',
-        ),
-        SelectMenuItem(
-          value: Size(0, 750),
-          label: 'Inline, tall',
-        ),
+        SelectMenuItem(value: Size(0, 0), label: 'Fullscreen'),
+        SelectMenuItem(value: Size(0, 250), label: 'Inline, wide'),
+        SelectMenuItem(value: Size(squareSize, squareSize), label: 'Inline, square'),
+        SelectMenuItem(value: Size(0, 750), label: 'Inline, tall'),
       ],
     );
   }
@@ -343,22 +271,10 @@ class _MainPageState extends State<MainPage> {
       value: _detectionAreaSize,
       onChanged: _scannerActive ? null : (size) => setState(() => _detectionAreaSize = size!),
       items: [
-        SelectMenuItem(
-          value: Size(250, 50),
-          label: 'Wide',
-        ),
-        SelectMenuItem(
-          value: Size(150, 150),
-          label: 'Square',
-        ),
-        SelectMenuItem(
-          value: Size(75, 150),
-          label: 'Tall',
-        ),
-        SelectMenuItem(
-          value: Size(double.infinity, double.infinity),
-          label: 'Full (deactivate Overlay)',
-        ),
+        SelectMenuItem(value: Size(250, 50), label: 'Wide'),
+        SelectMenuItem(value: Size(150, 150), label: 'Square'),
+        SelectMenuItem(value: Size(75, 150), label: 'Tall'),
+        SelectMenuItem(value: Size(double.infinity, double.infinity), label: 'Full (deactivate Overlay)'),
       ],
     );
   }
@@ -382,10 +298,7 @@ class _MainPageState extends State<MainPage> {
   Widget _scannerToggleButton() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: _spacing),
-      child: SBBPrimaryButton(
-        label: _scannerActive ? 'Close scanner' : 'Open scanner',
-        onPressed: _toggleScanner,
-      ),
+      child: SBBPrimaryButton(label: _scannerActive ? 'Close scanner' : 'Open scanner', onPressed: _toggleScanner),
     );
   }
 
@@ -403,9 +316,7 @@ class _MainPageState extends State<MainPage> {
       child: Text(
         _upperHelperTextController.text,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white,
-        ),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }
@@ -416,9 +327,7 @@ class _MainPageState extends State<MainPage> {
       child: Text(
         _lowerHelperTextController.text,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white,
-        ),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }
@@ -435,14 +344,8 @@ class _MainPageState extends State<MainPage> {
       } else {
         setState(() => _scannerActive = true);
         Navigator.of(context)
-            .push(MaterialPageRoute(
-              builder: (context) => DataScannerPage(
-                scannerConfiguration: _scannerConfiguration,
-              ),
-            ))
-            .whenComplete(
-              () => setState(() => _scannerActive = false),
-            );
+            .push(MaterialPageRoute(builder: (context) => DataScannerPage(scannerConfiguration: _scannerConfiguration)))
+            .whenComplete(() => setState(() => _scannerActive = false));
       }
     }
   }
@@ -456,71 +359,53 @@ class _MainPageState extends State<MainPage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (value.runtimeType == String) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: isDark ? style.modalBackgroundColor : null,
-        content: Row(children: [
-          Padding(
-            padding: EdgeInsets.only(right: _spacing / 2, bottom: _spacing / 4),
-            child: Icon(
-              SBBIcons.tick_small,
-              color: Colors.white,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: style.accordionBodyTextStyle?.copyWith(
-                color: Colors.white,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: isDark ? style.modalBackgroundColor : null,
+          content: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: _spacing / 2, bottom: _spacing / 4),
+                child: Icon(SBBIcons.tick_small, color: Colors.white),
               ),
-            ),
+              Expanded(
+                child: Text(value, style: style.accordionBodyTextStyle?.copyWith(color: Colors.white)),
+              ),
+            ],
           ),
-        ]),
-      ));
+        ),
+      );
     } else if (value.runtimeType == UICDetails) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: isDark ? style.modalBackgroundColor : null,
-        action: SnackBarAction(
-          label: 'DETAILS',
-          onPressed: () => _showUicDetails(value),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: isDark ? style.modalBackgroundColor : null,
+          action: SnackBarAction(label: 'DETAILS', onPressed: () => _showUicDetails(value)),
+          content: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: _spacing / 2, bottom: _spacing / 4),
+                child: Icon(SBBIcons.tick_small, color: Colors.white),
+              ),
+              Text((value as UICDetails).uicNumber, style: style.accordionBodyTextStyle?.copyWith(color: Colors.white)),
+            ],
+          ),
         ),
-        content: Row(children: [
-          Padding(
-            padding: EdgeInsets.only(right: _spacing / 2, bottom: _spacing / 4),
-            child: Icon(
-              SBBIcons.tick_small,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            (value as UICDetails).uicNumber,
-            style: style.accordionBodyTextStyle?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-        ]),
-      ));
+      );
     } else if (value.runtimeType == GS1Details) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        action: SnackBarAction(
-          label: 'DETAILS',
-          onPressed: () => _showGS1Details(value),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          action: SnackBarAction(label: 'DETAILS', onPressed: () => _showGS1Details(value)),
+          content: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: _spacing / 2, bottom: _spacing / 4),
+                child: Icon(SBBIcons.tick_small, color: Colors.white),
+              ),
+              Text((value as GS1Details).gs1Code, style: style.accordionBodyTextStyle?.copyWith(color: Colors.white)),
+            ],
+          ),
         ),
-        content: Row(children: [
-          Padding(
-            padding: EdgeInsets.only(right: _spacing / 2, bottom: _spacing / 4),
-            child: Icon(
-              SBBIcons.tick_small,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            (value as GS1Details).gs1Code,
-            style: style.accordionBodyTextStyle?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-        ]),
-      ));
+      );
     }
   }
 
@@ -554,16 +439,10 @@ class _MainPageState extends State<MainPage> {
                 if (uicDetails.descriptions.isEmpty)
                   Text('No details available for this UIC number.')
                 else ...[
-                  SBBListHeader(
-                    'Vehicle type',
-                    padding: EdgeInsets.only(left: 0, bottom: _spacing / 2),
-                  ),
+                  SBBListHeader('Vehicle type', padding: EdgeInsets.only(left: 0, bottom: _spacing / 2)),
                   Text(categoryNames[uicDetails.uicCategory] ?? 'Unknown'),
                   SizedBox(height: _spacing),
-                  SBBListHeader(
-                    'Description',
-                    padding: EdgeInsets.only(left: 0, bottom: _spacing / 2),
-                  ),
+                  SBBListHeader('Description', padding: EdgeInsets.only(left: 0, bottom: _spacing / 2)),
                   ...uicDetails.descriptions
                       .map(
                         (description) => Padding(
@@ -574,22 +453,15 @@ class _MainPageState extends State<MainPage> {
                               SizedBox(
                                 width: _spacing * 4,
                                 height: _spacing * 1.5,
-                                child: Text(
-                                  description.digits,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                child: Text(description.digits, style: TextStyle(fontWeight: FontWeight.bold)),
                               ),
-                              Expanded(
-                                child: Text(
-                                  description.description?.en ?? 'Unknown',
-                                ),
-                              ),
+                              Expanded(child: Text(description.description?.en ?? 'Unknown')),
                             ],
                           ),
                         ),
                       )
                       .toList(),
-                ]
+                ],
               ],
             ),
           ),
@@ -612,10 +484,7 @@ class _MainPageState extends State<MainPage> {
                 if (gs1Details.descriptions.isEmpty)
                   Text('No details available for this gs1 code.')
                 else ...[
-                  SBBListHeader(
-                    'Description',
-                    padding: EdgeInsets.only(left: 0, bottom: _spacing / 2),
-                  ),
+                  SBBListHeader('Description', padding: EdgeInsets.only(left: 0, bottom: _spacing / 2)),
                   ...gs1Details.descriptions
                       .map(
                         (description) => Padding(
@@ -626,22 +495,15 @@ class _MainPageState extends State<MainPage> {
                               SizedBox(
                                 width: _spacing * 4,
                                 height: _spacing * 1.5,
-                                child: Text(
-                                  description.digits,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
+                                child: Text(description.digits, style: TextStyle(fontWeight: FontWeight.bold)),
                               ),
-                              Expanded(
-                                child: Text(
-                                  description.description?.en ?? 'Unknown',
-                                ),
-                              ),
+                              Expanded(child: Text(description.description?.en ?? 'Unknown')),
                             ],
                           ),
                         ),
                       )
                       .toList(),
-                ]
+                ],
               ],
             ),
           ),
