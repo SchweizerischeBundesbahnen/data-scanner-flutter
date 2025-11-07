@@ -23,7 +23,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.29.x
+          flutter-version: 3.35.x
           cache: true
 
       - name: flutter setup
@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sdk: ["3.29.x", "3.32.x", "3.35.x"]
+        sdk: ["3.35.x"]
     steps:
       - uses: actions/checkout@v4
 
@@ -89,7 +89,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sdk: ["3.29.x", "3.32.x", "3.35.x"]
+        sdk: ["3.35.x"]
     steps:
       - uses: actions/checkout@v4
 

@@ -50,7 +50,7 @@ void main() {
       when(() => mockImage.format).thenReturn(FakeImageFormat());
     });
 
-    test('getNv21Uint8List returns expected length and format', () {
+    test('getNv21Uint8List returns expected length and Y plane', () {
       final nv21 = mockImage.getNv21Uint8List();
       expect(nv21.length, 24);
       expect(nv21.sublist(0, 16).every((e) => e == 100), true); // Y plane
@@ -62,7 +62,7 @@ void main() {
       expect(image.metadata?.rotation, InputImageRotation.rotation0deg);
     });
 
-    test('Handles null bytesPerPixel gracefully', () {
+    test('etNv21Uint8List handles null bytesPerPixel gracefully', () {
       when(() => yPlane.bytesPerPixel).thenReturn(null);
       when(() => uPlane.bytesPerPixel).thenReturn(null);
       when(() => vPlane.bytesPerPixel).thenReturn(null);

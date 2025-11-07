@@ -1,13 +1,5 @@
 # Changelog
 
-## [4.4.2](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/compare/4.4.0...4.4.1) (2025-09-28)
-
-
-### Bug Fixes
-
-* add workaround to fix with ImageFormat ([#9](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/issues/9))
-* update mlkit versions to fix camera rotation ([#43](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/issues/43))
-
 ## [4.4.1](https://github.com/SchweizerischeBundesbahnen/data-scanner-flutter/compare/4.4.0...4.4.1) (2024-12-18)
 
 
