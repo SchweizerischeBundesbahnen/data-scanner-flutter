@@ -1,7 +1,6 @@
-# Runs every night to check problems with stable flutter SDK
-# Also convenient to (re)build cache
+# Runs every night to check problems with stable flutter SDK & builds cache
 
-name: nightly build
+name: nightly_build
 
 on:
   workflow_dispatch:
@@ -9,7 +8,7 @@ on:
     - cron: "40 3 * * *" # 03:40 am every day
 
 jobs:
-  validation:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +17,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: 3.35.x
           cache: true
 
       - name: flutter setup
@@ -31,58 +31,12 @@ jobs:
       - name: test
         run: flutter test
 
-  package_scorer:
-    runs-on: ubuntu-latest
+      - name: Check publishable to pub.dev
+        run: flutter pub publish --dry-run
 
-    steps:
-      - uses: actions/checkout@v5
 
-      - uses: axel-op/dart-package-analyzer@v3
-        id: analysis
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-  ### FROM HERE: ALL DONE AFTER VALIDATION SUCCEEDS
-
-  build-android:
-    name: Build Android
-    runs-on: ubuntu-latest
-    needs: [validation]
-    defaults:
-      run:
-        working-directory: example
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-
-      - uses: actions/setup-java@v5
-        with:
-          java-version: "17"
-          distribution: "temurin"
-          cache: "gradle"
-
-      - run: flutter pub get
-      - run: flutter build appbundle --profile --no-pub
-
-  build-iOS:
-    name: Build iOS
-    runs-on: macos-latest
-    needs: [validation]
-    defaults:
-      run:
-        working-directory: example
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-
-      - run: flutter pub get
-      - run: flutter build ios --no-codesign
+  build-examples:
+    needs: [ test ]
+    uses: ./.github/workflows/example_app_build.yml
+    with:
+      flutter_sdks: '["3.35.x",""]'
