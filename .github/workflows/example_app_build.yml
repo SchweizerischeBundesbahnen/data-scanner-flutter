@@ -35,7 +35,6 @@ jobs:
           cache: "gradle"
 
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build appbundle --profile --no-pub
 
   build-iOS:
@@ -62,5 +61,4 @@ jobs:
           cache: true
 
       - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build ios --no-codesign
