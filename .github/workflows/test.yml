@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 # Ensure that new pushes/updates cancel running jobs
@@ -37,6 +40,9 @@ jobs:
       - name: test
         run: flutter test
 
+      - name: Check publishable to pub.dev
+        run: flutter pub publish --dry-run
+
   package_scorer:
     runs-on: ubuntu-latest
 
@@ -48,56 +54,9 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-  ### FROM HERE: ALL DONE AFTER VALIDATION SUCCEEDS
+  build-examples:
+    needs: [ validation ]
+    uses: ./.github/workflows/example_app_build.yml
+    with:
+      flutter_sdks: '["3.35.x"]'
 
-  build-android:
-    name: Build Android
-    runs-on: ubuntu-latest
-    needs: [validation]
-    defaults:
-      run:
-        working-directory: example
-    strategy:
-      fail-fast: false
-      matrix:
-        sdk: ["3.35.x"]
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: ${{ matrix.sdk }}
-          cache: true
-
-      - uses: actions/setup-java@v5
-        with:
-          java-version: "17"
-          distribution: "temurin"
-          cache: "gradle"
-
-      - run: flutter pub get
-      - run: flutter build appbundle --profile --no-pub
-
-  build-iOS:
-    name: Build iOS
-    runs-on: macos-latest
-    needs: [validation]
-    defaults:
-      run:
-        working-directory: example
-    strategy:
-      fail-fast: false
-      matrix:
-        sdk: ["3.35.x"]
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: ${{ matrix.sdk }}
-          cache: true
-
-      - run: flutter pub get
-      - run: flutter build ios --no-codesign
