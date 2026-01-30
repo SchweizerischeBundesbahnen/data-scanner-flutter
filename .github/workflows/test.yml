@@ -58,5 +58,5 @@ jobs:
     needs: [ validation ]
     uses: ./.github/workflows/example_app_build.yml
     with:
-      flutter_sdks: '["3.35.x"]'
+      flutter_sdks: '["3.35.x", "3.38.x"]'
 
