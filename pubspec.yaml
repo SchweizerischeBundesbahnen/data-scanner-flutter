@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/camera
-  camera: ^0.11.3
+  camera: 0.12.0+1
   # https://pub.dev/packages/google_mlkit_text_recognition
   google_mlkit_text_recognition: ^0.15.0
   # https://pub.dev/packages/google_mlkit_barcode_scanning
