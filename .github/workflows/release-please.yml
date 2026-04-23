@@ -23,7 +23,7 @@ jobs:
           app-id: ${{ vars.APPBAKERYGITHUBAPP_APPID }}
           private-key: ${{ secrets.APPBAKERYGITHUBAPP_PRIVATEKEY }}
 
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         id: release
         with:
           config-file: ci/release-please-config.json
