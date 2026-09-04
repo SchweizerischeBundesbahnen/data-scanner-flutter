@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -6,29 +7,43 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 extension CameraImageX on CameraImage {
+  /// Timed with `dart:developer` `Timeline` spans (`DataScanner.toInputImage`,
+  /// with nested `DataScanner.copyPlanes` / `DataScanner.nv21Convert`) so the
+  /// cost of this Dart-side copy is visible in both Flutter DevTools and, on
+  /// iOS/macOS profile builds, the Instruments "Points of Interest" track.
   InputImage toInputImage({int rotation = 0}) {
-    final WriteBuffer allBytes = WriteBuffer();
+    return developer.Timeline.timeSync(
+      'DataScanner.toInputImage',
+      () {
+        final WriteBuffer allBytes = WriteBuffer();
 
-    for (final Plane plane in this.planes) {
-      allBytes.putUint8List(plane.bytes);
-    }
+        developer.Timeline.timeSync('DataScanner.copyPlanes', () {
+          for (final Plane plane in this.planes) {
+            allBytes.putUint8List(plane.bytes);
+          }
+        });
 
-    final bytes = Platform.isAndroid ? this.getNv21Uint8List() : allBytes.done().buffer.asUint8List();
+        final bytes = Platform.isAndroid
+            ? developer.Timeline.timeSync('DataScanner.nv21Convert', () => this.getNv21Uint8List())
+            : allBytes.done().buffer.asUint8List();
 
-    final Size imageSize = Size(this.width.toDouble(), this.height.toDouble());
+        final Size imageSize = Size(this.width.toDouble(), this.height.toDouble());
 
-    final InputImageRotation imageRotation = InputImageRotationValue.fromRawValue(rotation)!;
+        final InputImageRotation imageRotation = InputImageRotationValue.fromRawValue(rotation)!;
 
-    final InputImageFormat inputImageFormat = InputImageFormatValue.fromRawValue(this.format.raw)!;
+        final InputImageFormat inputImageFormat = InputImageFormatValue.fromRawValue(this.format.raw)!;
 
-    final metadata = InputImageMetadata(
-      size: imageSize,
-      rotation: imageRotation,
-      format: Platform.isAndroid ? InputImageFormat.nv21 : inputImageFormat,
-      bytesPerRow: planes.first.bytesPerRow,
+        final metadata = InputImageMetadata(
+          size: imageSize,
+          rotation: imageRotation,
+          format: Platform.isAndroid ? InputImageFormat.nv21 : inputImageFormat,
+          bytesPerRow: planes.first.bytesPerRow,
+        );
+
+        return InputImage.fromBytes(bytes: bytes, metadata: metadata);
+      },
+      arguments: {'width': this.width, 'height': this.height, 'planes': this.planes.length},
     );
-
-    return InputImage.fromBytes(bytes: bytes, metadata: metadata);
   }
 
   Uint8List getNv21Uint8List() {

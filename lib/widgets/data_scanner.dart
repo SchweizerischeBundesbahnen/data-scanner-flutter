@@ -1,9 +1,12 @@
+import 'dart:developer' as developer;
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:sbb_data_scanner/extensions/_extensions.dart';
 import 'package:sbb_data_scanner/sbb_data_scanner.dart';
+import 'package:sbb_data_scanner/services/frame_stats_service.dart';
 import 'package:sbb_data_scanner/widgets/camera_builder.dart';
 import 'package:sbb_data_scanner/widgets/camera_overlay.dart';
 import 'package:sbb_data_scanner/widgets/sized_camera_preview.dart';
@@ -152,7 +155,14 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scannerConfiguration._routeObserver.subscribe(this, ModalRoute.of(context)!);
     });
+    FrameStatsService.start();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    FrameStatsService.stop();
+    super.dispose();
   }
 
   @override
@@ -187,107 +197,130 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
   /// within the area of [HoleBox]. Skips [scannerConfiguration.onExtracted]
   /// when the same element is scanned at least twice in a row.
   Future<void> _onImageReceived(BuildContext context, CameraImage image, CameraDescription description) async {
-    if (_paused || _isDetecting || !mounted) return;
+    if (_paused || _isDetecting || !mounted) {
+      FrameStatsService.recordCameraFrame(processed: false);
+      return;
+    }
+
+    FrameStatsService.recordCameraFrame(processed: true);
 
     _isDetecting = true;
 
-    // CameraDescription.sensorOrientation doesn't always report the orientation
-    // correctly, so we need to figure it out manually.
-    final nativeOrientation = await NativeDeviceOrientationCommunicator().orientation();
+    // Spans the whole per-frame pipeline (orientation lookup, frame copy,
+    // recognition, extraction) so it can be compared against the frame
+    // budget (~16.6ms @60fps / ~33ms @30fps) in DevTools/Instruments.
+    final frameTask = developer.TimelineTask()
+      ..start('DataScanner.frame', arguments: {'width': image.width, 'height': image.height});
 
-    // MediaQuery.orientation doesn't differentiate between up/down left/right,
-    // but it has an impact on the camera.
-    final orientationDegrees = {
-      NativeDeviceOrientation.portraitUp: 90,
-      NativeDeviceOrientation.landscapeRight: 180,
-      NativeDeviceOrientation.portraitDown: 270,
-      NativeDeviceOrientation.landscapeLeft: 0,
-      NativeDeviceOrientation.unknown: 90, // assume portraitUp by default
-    };
-
-    final rotation = orientationDegrees[nativeOrientation]!;
-
-    Map<Rect, String?> boundingBoxes = {};
-
-    for (final processor in scannerConfiguration.processors) {
-      boundingBoxes.addAll(await processor.getBoundingBoxes(image: image, imageRotation: rotation));
-    }
-
-    Map<Rect, T?> detectedElements = {};
-
-    for (final extractor in scannerConfiguration.extractors) {
-      detectedElements.addAll(boundingBoxes.map((key, value) => MapEntry(key, extractor.extract(value))));
-    }
-
-    detectedElements.removeWhere((key, value) => value == null);
-
-    Map<Rect, T> extractedElements = detectedElements.map((key, value) => MapEntry(key, value!));
-
-    // Make absolutely sure the scanner is still active before accessing context
-    if (_paused) return;
-
-    Size orientedImageSize;
-
-    if (MediaQuery.of(context).orientation == Orientation.portrait) {
-      orientedImageSize = image.height > image.width
-          ? Size(image.width.toDouble(), image.height.toDouble())
-          : Size(image.height.toDouble(), image.width.toDouble());
-    } else {
-      orientedImageSize = image.height > image.width
-          ? Size(image.height.toDouble(), image.width.toDouble())
-          : Size(image.width.toDouble(), image.height.toDouble());
-    }
-
-    // Whether the widget size is horizontally more narrow than the image
-    final isNarrow = _calculatedSize!.aspectRatio < orientedImageSize.width / orientedImageSize.height;
-
-    // If the widget is narrow, use the height to scale
-    final scaleFactor =
-        1 /
-        (isNarrow
-            ? orientedImageSize.height / _calculatedSize!.height
-            : orientedImageSize.width / _calculatedSize!.width);
-
-    final scaledElements = extractedElements.map((key, value) => MapEntry(key.scale(scaleFactor), value));
-
-    final scaledImageBounds = Rect.fromPoints(
-      Offset.zero,
-      Offset(orientedImageSize.width * scaleFactor, orientedImageSize.height * scaleFactor),
-    );
-
-    final previewBounds = Rect.fromPoints(
-      Offset.zero,
-      Offset(_calculatedSize!.width, _calculatedSize!.height),
-    ).deflate(scannerConfiguration.detectionOutline?.padding ?? 0);
-
-    final detectionAreaBounds = Rect.fromCenter(
-      center: previewBounds.center,
-      width: scannerConfiguration.detectionAreaWidth ?? _calculatedSize!.width - (2 * _defaultDetectionAreaMargin),
-      height: scannerConfiguration.detectionAreaHeight,
-    ).deflate(scannerConfiguration.detectionOutline?.padding ?? 0);
-
-    final deltaY = (scaledImageBounds.height - _calculatedSize!.height) / -2;
-    final deltaX = (scaledImageBounds.width - _calculatedSize!.width) / -2;
-
-    final translatedElements = scaledElements.map((key, value) => MapEntry(key.translate(deltaX, deltaY), value));
-
-    translatedElements.removeWhere((key, value) => !_isWithinArea(previewBounds, key));
-
-    if (mounted) {
-      setState(() => _detectedElements = translatedElements.map((key, value) => MapEntry(key, value.toString())));
-    }
-
-    translatedElements.removeWhere((key, value) => !_isWithinArea(detectionAreaBounds, key));
-
-    if (translatedElements.isNotEmpty) {
-      final result = translatedElements[translatedElements.keys.first]!;
-      if (result.toString() != _previousResult.toString()) {
-        scannerConfiguration.onExtracted?.call(result);
-        _previousResult = result.toString();
+    try {
+      // CameraDescription.sensorOrientation doesn't always report the orientation
+      // correctly, so we need to figure it out manually.
+      final orientationTask = developer.TimelineTask()..start('DataScanner.nativeOrientationLookup');
+      final NativeDeviceOrientation nativeOrientation;
+      try {
+        nativeOrientation = await NativeDeviceOrientationCommunicator().orientation();
+      } finally {
+        orientationTask.finish();
       }
-    }
 
-    _isDetecting = false;
+      // MediaQuery.orientation doesn't differentiate between up/down left/right,
+      // but it has an impact on the camera.
+      final orientationDegrees = {
+        NativeDeviceOrientation.portraitUp: 90,
+        NativeDeviceOrientation.landscapeRight: 180,
+        NativeDeviceOrientation.portraitDown: 270,
+        NativeDeviceOrientation.landscapeLeft: 0,
+        NativeDeviceOrientation.unknown: 90, // assume portraitUp by default
+      };
+
+      final rotation = orientationDegrees[nativeOrientation]!;
+
+      Map<Rect, String?> boundingBoxes = {};
+
+      for (final processor in scannerConfiguration.processors) {
+        boundingBoxes.addAll(await processor.getBoundingBoxes(image: image, imageRotation: rotation));
+      }
+
+      Map<Rect, T?> detectedElements = developer.Timeline.timeSync('DataScanner.extract', () {
+        final Map<Rect, T?> result = {};
+        for (final extractor in scannerConfiguration.extractors) {
+          result.addAll(boundingBoxes.map((key, value) => MapEntry(key, extractor.extract(value))));
+        }
+        return result;
+      });
+
+      detectedElements.removeWhere((key, value) => value == null);
+
+      Map<Rect, T> extractedElements = detectedElements.map((key, value) => MapEntry(key, value!));
+
+      // Make absolutely sure the scanner is still active before accessing context
+      if (_paused) return;
+
+      Size orientedImageSize;
+
+      if (MediaQuery.of(context).orientation == Orientation.portrait) {
+        orientedImageSize = image.height > image.width
+            ? Size(image.width.toDouble(), image.height.toDouble())
+            : Size(image.height.toDouble(), image.width.toDouble());
+      } else {
+        orientedImageSize = image.height > image.width
+            ? Size(image.height.toDouble(), image.width.toDouble())
+            : Size(image.width.toDouble(), image.height.toDouble());
+      }
+
+      // Whether the widget size is horizontally more narrow than the image
+      final isNarrow = _calculatedSize!.aspectRatio < orientedImageSize.width / orientedImageSize.height;
+
+      // If the widget is narrow, use the height to scale
+      final scaleFactor =
+          1 /
+          (isNarrow
+              ? orientedImageSize.height / _calculatedSize!.height
+              : orientedImageSize.width / _calculatedSize!.width);
+
+      final scaledElements = extractedElements.map((key, value) => MapEntry(key.scale(scaleFactor), value));
+
+      final scaledImageBounds = Rect.fromPoints(
+        Offset.zero,
+        Offset(orientedImageSize.width * scaleFactor, orientedImageSize.height * scaleFactor),
+      );
+
+      final previewBounds = Rect.fromPoints(
+        Offset.zero,
+        Offset(_calculatedSize!.width, _calculatedSize!.height),
+      ).deflate(scannerConfiguration.detectionOutline?.padding ?? 0);
+
+      final detectionAreaBounds = Rect.fromCenter(
+        center: previewBounds.center,
+        width: scannerConfiguration.detectionAreaWidth ?? _calculatedSize!.width - (2 * _defaultDetectionAreaMargin),
+        height: scannerConfiguration.detectionAreaHeight,
+      ).deflate(scannerConfiguration.detectionOutline?.padding ?? 0);
+
+      final deltaY = (scaledImageBounds.height - _calculatedSize!.height) / -2;
+      final deltaX = (scaledImageBounds.width - _calculatedSize!.width) / -2;
+
+      final translatedElements = scaledElements.map((key, value) => MapEntry(key.translate(deltaX, deltaY), value));
+
+      translatedElements.removeWhere((key, value) => !_isWithinArea(previewBounds, key));
+
+      if (mounted) {
+        setState(() => _detectedElements = translatedElements.map((key, value) => MapEntry(key, value.toString())));
+      }
+
+      translatedElements.removeWhere((key, value) => !_isWithinArea(detectionAreaBounds, key));
+
+      if (translatedElements.isNotEmpty) {
+        final result = translatedElements[translatedElements.keys.first]!;
+        if (result.toString() != _previousResult.toString()) {
+          scannerConfiguration.onExtracted?.call(result);
+          _previousResult = result.toString();
+        }
+      }
+
+      _isDetecting = false;
+    } finally {
+      frameTask.finish();
+    }
   }
 
   bool _isWithinArea(Rect area, Rect element) {
