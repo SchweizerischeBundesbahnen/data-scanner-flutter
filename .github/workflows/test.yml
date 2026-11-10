@@ -26,7 +26,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.35.x
+          flutter-version: 3.44.x
           cache: true
 
       - name: flutter setup
@@ -58,5 +58,5 @@ jobs:
     needs: [ validation ]
     uses: ./.github/workflows/example_app_build.yml
     with:
-      flutter_sdks: '["3.41.x", "3.47.x"]'
+      flutter_sdks: '["3.44.x", "3.47.x"]'
 
