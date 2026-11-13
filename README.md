@@ -9,6 +9,7 @@ It is built on top of [google_mlkit] and runs solely on-device.
 - [Getting-Started](#getting-started)
     - [Supported platforms](#supported-platforms)
     - [Preconditions](#preconditions)
+      - [iOS setup with Swift Package Manager](#ios-setup-with-swift-package-manager)
     - [In Code Usage](#in-code-usage)
 - [Documentation](#documentation)
     - [Features](#features)
@@ -45,8 +46,45 @@ It is built on top of [google_mlkit] and runs solely on-device.
 This package uses the Flutter [Camera] plugin to access the device camera.
 Make sure to follow their installation instructions.
 
-Futhermore, follow the instructions on [google_mlkit_barcode_scanning] and [google_mlkit_text_recognition] for
-proper setup. Specifically, setup the minimum iOS and Android SDKs and the Podfile.
+Furthermore, follow the platform requirements on [google_mlkit_barcode_scanning] and
+[google_mlkit_text_recognition], including the minimum iOS and Android SDK versions.
+For iOS integration using Swift Package Manager (SPM), complete the additional steps below.
+
+##### iOS setup with Swift Package Manager
+
+Follow Flutter's [Swift Package Manager integration instructions](https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers)
+and use **iOS 15.5 or later**.
+
+Complete the [ML Kit SPM installation steps](https://github.com/d-date/google-mlkit-swiftpm#installation)
+in your **app target**:
+
+- Add `-ObjC` and `-all_load` to **Other Linker Flags** for Debug, Profile, and
+  Release, preserving `$(inherited)` and existing flags.
+- For text recognition, add a **Run Script** phase to Runner after **Copy Bundle
+  Resources**, disable **Based on dependency analysis**, and set **User Script
+  Sandboxing** to **No** (as for Flutter's build scripts):
+
+  ```sh
+  set -e
+  cd "$FLUTTER_APPLICATION_PATH"
+  "$FLUTTER_ROOT/bin/dart" run sbb_data_scanner:install_ios_ocr_resources
+  ```
+
+  This downloads `LatinOCRResources.bundle` once, verifies its checksum, caches it
+  under `~/Library/Caches/sbb_data_scanner/ocr/`, and copies it into the app before
+  codesigning on each build. Subsequent builds work offline; CI needs network
+  access on a cache miss. No bundle needs to be checked in or added to Copy Bundle
+  Resources manually. Remove any existing manual bundle entry to avoid duplicate
+  copies. **Barcode-only apps need no script or resource bundle.**
+
+The script supports `google-mlkit-swiftpm` **9.0.2** and fails if the version in
+`ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved` differs. Bundle
+version and checksum are maintained in this package's script. Use the
+[upstream manual setup](https://github.com/d-date/google-mlkit-swiftpm#2-add-the-resource-bundles)
+for other versions. The downloaded model remains subject to [Google's ML Kit terms](https://developers.google.com/ml-kit/terms).
+
+A missing OCR bundle causes `MLKTextRecognizerInternalErrorCreationFailure: Invalid model path`
+at runtime, even when the build succeeds.
 
 #### In Code Usage
 

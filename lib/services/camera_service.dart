@@ -14,10 +14,7 @@ abstract class CameraService {
         return cameras.first;
       }
 
-      throw CameraException(
-        'cameraNotFound',
-        'No camera is available for direction $direction on this device.',
-      );
+      throw CameraException('cameraNotFound', 'No camera is available for direction $direction on this device.');
     }
   }
 }
