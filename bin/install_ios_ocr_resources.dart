@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-const mlKitVersion = '9.0.2';
-const bundleChecksum = 'c790283599f67708c06fd93de61d96823ce2ad984ad00bfda5922afda0861758';
 const bundleName = 'LatinOCRResources.bundle';
 
 Future<void> main() async {
@@ -28,7 +26,7 @@ String requiredSetting(Map<String, String> environment, String name) {
   return value;
 }
 
-void validateVersion(String contents) {
+String resolvedVersion(String contents) {
   final resolved = jsonDecode(contents);
   if (resolved is! Map || resolved['pins'] is! List) {
     throw const FormatException('Invalid workspace Package.resolved: missing pins.');
@@ -39,12 +37,15 @@ void validateVersion(String contents) {
     throw const FormatException('Expected one google-mlkit-swiftpm pin in Package.resolved.');
   }
   final state = (matches.single as Map)['state'];
-  if (state is! Map || state['version'] != mlKitVersion) {
+  final version = state is Map ? state['version'] : null;
+  if (version is! String ||
+      !RegExp(r'^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$').hasMatch(version)) {
     throw const FormatException(
-      'OCR resources require google-mlkit-swiftpm $mlKitVersion. '
-      'Use a compatible sbb_data_scanner version or configure the bundle manually.',
+      'Expected a release version for google-mlkit-swiftpm in Package.resolved. '
+      'Branch and revision pins require manual OCR resource configuration.',
     );
   }
+  return version;
 }
 
 Future<ProcessResult> run(String executable, List<String> arguments) async {
@@ -56,10 +57,16 @@ Future<ProcessResult> run(String executable, List<String> arguments) async {
 }
 
 Future<void> verifyArchive(File archive) async {
-  final result = await run('/usr/bin/shasum', ['-a', '256', archive.path]);
-  if (!result.stdout.toString().startsWith('$bundleChecksum ')) {
-    throw FormatException('Checksum mismatch for ${archive.path}. Delete this cached archive and retry.');
+  final result = await run('/usr/bin/unzip', ['-Z', '-1', archive.path]);
+  final entries = const LineSplitter().convert(result.stdout.toString());
+  if (entries.isEmpty ||
+      !entries.any((entry) => entry.startsWith('$bundleName/') && !entry.endsWith('/')) ||
+      entries.any(
+        (entry) => !entry.startsWith('$bundleName/') || entry.split('/').contains('..') || entry.contains(r'\'),
+      )) {
+    throw FormatException('Invalid $bundleName archive: ${archive.path}. Delete the cached archive and retry.');
   }
+  await run('/usr/bin/unzip', ['-tq', archive.path]);
 }
 
 Future<void> install(Map<String, String> environment) async {
@@ -69,7 +76,7 @@ Future<void> install(Map<String, String> environment) async {
   final resourcesPath = requiredSetting(environment, 'UNLOCALIZED_RESOURCES_FOLDER_PATH');
   final home = requiredSetting(environment, 'HOME');
   final lockfile = File('$sourceRoot/$projectName.xcworkspace/xcshareddata/swiftpm/Package.resolved');
-  validateVersion(await lockfile.readAsString());
+  final mlKitVersion = resolvedVersion(await lockfile.readAsString());
 
   final cache = Directory('$home/Library/Caches/sbb_data_scanner/ocr/$mlKitVersion');
   await cache.create(recursive: true);

@@ -70,18 +70,20 @@ in your **app target**:
   "$FLUTTER_ROOT/bin/dart" run sbb_data_scanner:install_ios_ocr_resources
   ```
 
-  This downloads `LatinOCRResources.bundle` once, verifies its checksum, caches it
+  This downloads `LatinOCRResources.bundle` once per ML Kit version, validates the ZIP, caches it
   under `~/Library/Caches/sbb_data_scanner/ocr/`, and copies it into the app before
   codesigning on each build. Subsequent builds work offline; CI needs network
   access on a cache miss. No bundle needs to be checked in or added to Copy Bundle
   Resources manually. Remove any existing manual bundle entry to avoid duplicate
   copies. **Barcode-only apps need no script or resource bundle.**
 
-The script supports `google-mlkit-swiftpm` **9.0.2** and fails if the version in
-`ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved` differs. Bundle
-version and checksum are maintained in this package's script. Use the
-[upstream manual setup](https://github.com/d-date/google-mlkit-swiftpm#2-add-the-resource-bundles)
-for other versions. The downloaded model remains subject to [Google's ML Kit terms](https://developers.google.com/ml-kit/terms).
+The script selects the release matching `google-mlkit-swiftpm` in
+`ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved` automatically.
+Each version has its own cache; the first build after an upgrade requires network
+access. Missing release assets fail the build; branch/revision pins require
+[manual setup](https://github.com/d-date/google-mlkit-swiftpm#2-add-the-resource-bundles).
+ZIP validation detects corruption but does not verify a pinned SHA-256 checksum.
+The downloaded model remains subject to [Google's ML Kit terms](https://developers.google.com/ml-kit/terms).
 
 A missing OCR bundle causes `MLKTextRecognizerInternalErrorCreationFailure: Invalid model path`
 at runtime, even when the build succeeds.
