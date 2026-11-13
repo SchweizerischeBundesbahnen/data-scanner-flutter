@@ -86,15 +86,6 @@
 			path = RunnerTests;
 			sourceTree = "<group>";
 		};
-		35E3EF9D1AED6F7E5E26F7D4 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				88454417C6CFE23325E9DDE4 /* Pods_Runner.framework */,
-				3D31870DF163149B615FA7D3 /* Pods_RunnerTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,7 +105,6 @@
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
 				331C8082294A63A400263BE5 /* RunnerTests */,
-				35E3EF9D1AED6F7E5E26F7D4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,13 +130,6 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
-			sourceTree = "<group>";
-		};
-		A197AD014B612039CB5384B9 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
