@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'hole_painter.dart';
+import 'package:sbb_data_scanner/widgets/hole_painter.dart';
 
 /// Screen overlay when scanner is active.
 class CameraOverlay extends StatelessWidget {
   const CameraOverlay({
-    Key? key,
+    super.key,
     required this.previewSize,
     required this.detectionAreaBoundingBox,
     this.upperHelper,
     this.lowerHelper,
-  }) : super(key: key);
+  });
 
   /// Size of the widget over which the overlay should be displayed.
   final Size previewSize;

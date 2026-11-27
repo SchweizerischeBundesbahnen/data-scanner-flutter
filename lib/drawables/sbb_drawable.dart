@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 /// Draws the company logo of SBB.
 class SBBLogoDrawable extends StatelessWidget {
+  const SBBLogoDrawable({super.key, this.color = Colors.white});
+
   /// Stroke color of the logo. Defaults to [Colors.white].
   final Color color;
-
-  const SBBLogoDrawable({Key? key, this.color = Colors.white}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +18,14 @@ class SBBLogoDrawable extends StatelessWidget {
 
 /// This custom painter was generated with https://fluttershapemaker.com/
 class _RPSCustomPainter extends CustomPainter {
+  const _RPSCustomPainter(this.color);
+
   /// Stroke color to be used when drawing.
   final Color color;
 
-  const _RPSCustomPainter(this.color);
-
   @override
   void paint(Canvas canvas, Size size) {
-    Path path_0 = Path();
+    final Path path_0 = Path();
     path_0.moveTo(size.width * 0.6047389, 0);
     path_0.lineTo(size.width * 0.8008207, size.height * 0.3858432);
     path_0.lineTo(size.width * 0.5575088, size.height * 0.3858432);
@@ -50,7 +50,7 @@ class _RPSCustomPainter extends CustomPainter {
     path_0.lineTo(size.width * 0.7504269, 0);
     path_0.close();
 
-    Paint paint0Fill = Paint()..style = PaintingStyle.fill;
+    final Paint paint0Fill = Paint()..style = PaintingStyle.fill;
     paint0Fill.color = color;
     canvas.drawPath(path_0, paint0Fill);
   }

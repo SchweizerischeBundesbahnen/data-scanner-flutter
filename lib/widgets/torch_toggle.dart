@@ -6,11 +6,11 @@ import 'package:sbb_data_scanner/drawables/flashlight_on_drawable.dart';
 /// Shows a toggle button to toggle the camera flash in torch mode.
 class TorchToggle extends StatefulWidget {
   const TorchToggle({
-    Key? key,
+    super.key,
     required this.cameraController,
     this.alignment = Alignment.bottomCenter,
     this.margin = const EdgeInsets.all(32),
-  }) : super(key: key);
+  });
 
   /// The camera controller 'owns' the camera and is used to set the `FlashMode`
   final CameraController cameraController;

@@ -26,12 +26,12 @@ void main() {
         // wrong application identifier
         {'testValue': '(9999)761329948010399', 'expected': false},
       ];
-      testValues.forEach((testValue) {
+      for (final testValue in testValues) {
         test('should correctly validate [${testValue['testValue']}]', () async {
           final result = service.validate(testValue['testValue'] as String, GS1Type.giai);
           expect(result, testValue['expected']);
         });
-      });
+      }
     });
   });
 }

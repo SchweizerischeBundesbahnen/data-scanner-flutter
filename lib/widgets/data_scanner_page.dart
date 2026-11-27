@@ -4,6 +4,8 @@ import 'package:sbb_data_scanner/widgets/data_scanner.dart';
 
 /// Ready-to-use fullscreen [DataScanner].
 class DataScannerPage<T> extends StatelessWidget {
+  const DataScannerPage({super.key, required this.scannerConfiguration, this.title, this.showSBBLogo = true});
+
   /// Configuration of the [DataScanner].
   final DataScannerConfiguration<T> scannerConfiguration;
 
@@ -12,9 +14,6 @@ class DataScannerPage<T> extends StatelessWidget {
 
   /// Whether to display the SBB logo.
   final bool showSBBLogo;
-
-  DataScannerPage({Key? key, required this.scannerConfiguration, this.title, this.showSBBLogo = true})
-    : super(key: key);
 
   @override
   Widget build(BuildContext context) {

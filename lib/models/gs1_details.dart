@@ -3,13 +3,13 @@ import 'package:sbb_data_scanner/models/localized_string.dart';
 
 /// Holds information about gs1 digits.
 class GS1Description {
+  GS1Description(this.digits, this.description);
+
   /// The described digits.
   final String digits;
 
   /// Description of [digits]. Is `null` when no description matches [digits].
   final LocalizedString? description;
-
-  GS1Description(this.digits, this.description);
 
   @override
   String toString() => '{digits: $digits, description: $description}';
@@ -17,13 +17,15 @@ class GS1Description {
 
 /// Contains details about the meaning behind a GS1 code.
 class GS1Details {
+  GS1Details({required this.gs1Code, required this.rawValue, required this.gs1type, required this.descriptions});
+
   /// The full GS1 code.
   final String gs1Code;
 
   /// The normalized GS1 code.
   String get gs1Normalized => gs1Code.replaceAll(RegExp(r'\D'), '');
 
-  /// The raw value which was extracted. Can contain special characters like <GS>
+  /// The raw value which was extracted. Can contain special characters like `<GS>`
   /// (group separator ASCII#29)
   final String rawValue;
 
@@ -33,8 +35,6 @@ class GS1Details {
 
   /// The GS1 code split into its different segments.
   final List<GS1Description> descriptions;
-
-  GS1Details({required this.gs1Code, required this.rawValue, required this.gs1type, required this.descriptions});
 
   /// Prints an object string. Use this instead of [GS1Details.toString].
   String toObjectString() => '{gs1Code: $gs1Code, gs1Values: $descriptions}';

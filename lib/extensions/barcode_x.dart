@@ -14,7 +14,7 @@ extension BarcodeX on Barcode {
       BarcodeFormat.upce,
     ];
 
-    return oneDimensionalFormats.contains(this.format);
+    return oneDimensionalFormats.contains(format);
   }
 
   bool get isTwoDimensional {
@@ -25,6 +25,6 @@ extension BarcodeX on Barcode {
       BarcodeFormat.aztec,
     ];
 
-    return twoDimensionalFormats.contains(this.format);
+    return twoDimensionalFormats.contains(format);
   }
 }

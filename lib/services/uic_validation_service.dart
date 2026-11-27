@@ -2,10 +2,10 @@ import 'package:sbb_data_scanner/services/uic_details_service.dart';
 
 /// Utilities for validating UIC numbers.
 class UICValidatorService {
+  UICValidatorService({Luhn? luhn}) : _luhn = luhn ?? Luhn();
+
   /// Instance of the Luhn algorithm.
   final Luhn _luhn;
-
-  UICValidatorService({Luhn? luhn}) : _luhn = luhn ?? Luhn();
 
   /// Validates a digit-only UIC number. Make sure [uic] only contains digits.
   bool validate(String uic) {

@@ -7,7 +7,7 @@ final RouteObserver<ModalRoute> routeObserver = RouteObserver();
 void main() => runApp(DataScannerExample());
 
 class DataScannerExample extends StatelessWidget {
-  const DataScannerExample({Key? key}) : super(key: key);
+  const DataScannerExample({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class DataScannerExample extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -55,8 +55,10 @@ class _MainPageState extends State<MainPage> {
   Size _scannerSize = Size(0, 0);
   Size _detectionAreaSize = Size(250, 50);
 
-  TextEditingController _upperHelperTextController = TextEditingController(text: 'Point your camera at something');
-  TextEditingController _lowerHelperTextController = TextEditingController(text: 'lower helper example');
+  final TextEditingController _upperHelperTextController = TextEditingController(
+    text: 'Point your camera at something',
+  );
+  final TextEditingController _lowerHelperTextController = TextEditingController(text: 'lower helper example');
 
   bool _showDetectionLabels = true;
   bool _showOverlay = true;
@@ -126,7 +128,7 @@ class _MainPageState extends State<MainPage> {
         'Scanning configuration',
         padding: EdgeInsets.only(left: _spacing, bottom: _spacing / 2),
       ),
-      SBBGroup(
+      SBBContentBox(
         child: Column(
           children: [_processorEnablers(), _extractorSelector(), _detectionAreaModeSelector(), _zoomEnabler()],
         ),
@@ -140,7 +142,7 @@ class _MainPageState extends State<MainPage> {
         'Visual configuration',
         padding: EdgeInsets.only(left: _spacing, bottom: _spacing / 2),
       ),
-      SBBGroup(
+      SBBContentBox(
         child: Column(
           children: [
             _detectionLabelEnabler(),
@@ -443,24 +445,22 @@ class _MainPageState extends State<MainPage> {
                   Text(categoryNames[uicDetails.uicCategory] ?? 'Unknown'),
                   SizedBox(height: _spacing),
                   SBBListHeader('Description', padding: EdgeInsets.only(left: 0, bottom: _spacing / 2)),
-                  ...uicDetails.descriptions
-                      .map(
-                        (description) => Padding(
-                          padding: EdgeInsets.only(bottom: _spacing / 4),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: _spacing * 4,
-                                height: _spacing * 1.5,
-                                child: Text(description.digits, style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Expanded(child: Text(description.description?.en ?? 'Unknown')),
-                            ],
+                  ...uicDetails.descriptions.map(
+                    (description) => Padding(
+                      padding: EdgeInsets.only(bottom: _spacing / 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: _spacing * 4,
+                            height: _spacing * 1.5,
+                            child: Text(description.digits, style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
-                        ),
-                      )
-                      .toList(),
+                          Expanded(child: Text(description.description?.en ?? 'Unknown')),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ],
             ),
@@ -485,24 +485,22 @@ class _MainPageState extends State<MainPage> {
                   Text('No details available for this gs1 code.')
                 else ...[
                   SBBListHeader('Description', padding: EdgeInsets.only(left: 0, bottom: _spacing / 2)),
-                  ...gs1Details.descriptions
-                      .map(
-                        (description) => Padding(
-                          padding: EdgeInsets.only(bottom: _spacing / 4),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: _spacing * 4,
-                                height: _spacing * 1.5,
-                                child: Text(description.digits, style: TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              Expanded(child: Text(description.description?.en ?? 'Unknown')),
-                            ],
+                  ...gs1Details.descriptions.map(
+                    (description) => Padding(
+                      padding: EdgeInsets.only(bottom: _spacing / 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: _spacing * 4,
+                            height: _spacing * 1.5,
+                            child: Text(description.digits, style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
-                        ),
-                      )
-                      .toList(),
+                          Expanded(child: Text(description.description?.en ?? 'Unknown')),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ],
             ),

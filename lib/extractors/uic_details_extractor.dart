@@ -11,6 +11,14 @@ enum UICDetectionMode { strict, loose }
 
 /// Extracts details of UIC numbers.
 class UICDetailsExtractor implements Extractor<UICDetails> {
+  UICDetailsExtractor({
+    UICDetectionMode? uicDetectionMode,
+    UICValidatorService? uicValidatorService,
+    UICDetailsService? uicDetailsService,
+  }) : _uicDetectionMode = uicDetectionMode ?? UICDetectionMode.strict,
+       _uicValidatorService = uicValidatorService ?? UICValidatorService(),
+       _uicDetailsService = uicDetailsService ?? UICDetailsService();
+
   /// The [UICValidatorService] to be used.
   final UICValidatorService _uicValidatorService;
 
@@ -21,14 +29,6 @@ class UICDetailsExtractor implements Extractor<UICDetails> {
   final UICDetectionMode _uicDetectionMode;
 
   final RegExp _everythingExceptDigits = RegExp(r'[^\d]');
-
-  UICDetailsExtractor({
-    UICDetectionMode? uicDetectionMode,
-    UICValidatorService? uicValidatorService,
-    UICDetailsService? uicDetailsService,
-  }) : _uicDetectionMode = uicDetectionMode ?? UICDetectionMode.strict,
-       _uicValidatorService = uicValidatorService ?? UICValidatorService(),
-       _uicDetailsService = uicDetailsService ?? UICDetailsService();
 
   /// Extracts an UIC number from [input] and splits it up into its
   /// [UICDetails] Returns `null` if [input] is `null` or if the resulting UIC

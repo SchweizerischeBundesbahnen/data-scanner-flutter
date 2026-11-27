@@ -26,7 +26,7 @@ class GS1DetailsService {
 
     switch (type) {
       case GS1Type.giai:
-        return '(' + onlyDigits.substring(0, 4) + ')' + onlyDigits.substring(4);
+        return '(${onlyDigits.substring(0, 4)})${onlyDigits.substring(4)}';
       case GS1Type.unknown:
         return onlyDigits;
     }
@@ -56,7 +56,7 @@ class _GS1Values {
       de: 'Global Individual Asset Identifier (GIAI)',
       fr: 'Global Individual Asset Identifier (GIAI)',
       it: 'Global Individual Asset Identifier (GIAI)',
-      en: "Global Individual Asset Identifier (GIAI)",
+      en: 'Global Individual Asset Identifier (GIAI)',
     ),
   };
 
@@ -64,6 +64,6 @@ class _GS1Values {
     de: 'Asset Identifier',
     fr: 'Asset Identifier',
     it: 'Asset Identifier',
-    en: "Asset Identifier",
+    en: 'Asset Identifier',
   );
 }

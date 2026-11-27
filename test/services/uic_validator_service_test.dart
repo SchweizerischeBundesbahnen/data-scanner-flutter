@@ -56,12 +56,12 @@ void main() {
         {'testValue': '44 44 44-44 444-4', 'expected': false},
       ];
 
-      testValues.forEach((testValue) {
+      for (final testValue in testValues) {
         test('should correctly validate the Luhn checksum of [${testValue['testValue']}]', () async {
           final result = luhn.validate(testValue['testValue'] as String);
           expect(result, testValue['expected']);
         });
-      });
+      }
     });
   });
 }

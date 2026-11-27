@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 /// Draws an enabled flashlight
 class FlashlightOnDrawable extends StatelessWidget {
+  const FlashlightOnDrawable({super.key, this.color = Colors.transparent});
+
   /// Stroke color of the flashlight. Defaults to [Colors.transparent].
   final Color color;
-
-  const FlashlightOnDrawable({Key? key, this.color = Colors.transparent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +18,14 @@ class FlashlightOnDrawable extends StatelessWidget {
 
 /// This custom painter was generated with https://fluttershapemaker.com/ based on the SBB icon flashlight off
 class _RPSCustomPainter extends CustomPainter {
+  const _RPSCustomPainter(this.color);
+
   /// Stroke color to be used when drawing.
   final Color color;
 
-  const _RPSCustomPainter(this.color);
-
   @override
   void paint(Canvas canvas, Size size) {
-    Path path_0 = Path();
+    final Path path_0 = Path();
     path_0.moveTo(8.5, 21.5);
     path_0.lineTo(14.5, 21.5);
     path_0.lineTo(14.5, 11.5);
@@ -57,7 +57,7 @@ class _RPSCustomPainter extends CustomPainter {
     path_0.moveTo(9, 5);
     path_0.lineTo(7, 2);
 
-    Paint paint0Stroke = Paint()
+    final Paint paint0Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.04166667;
     paint0Stroke.color = color.withValues(alpha: 1.0);
