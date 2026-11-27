@@ -7,14 +7,14 @@ import 'package:sbb_data_scanner/services/camera_service.dart';
 /// Creates a [CameraController] and passes it into [builder].
 class CameraBuilder extends StatefulWidget {
   const CameraBuilder({
-    Key? key,
+    super.key,
     required this.builder,
     this.onImageReceived,
     this.onPermissionDenied,
     this.onError,
     this.onZoomChanged,
     this.enableZoom = false,
-  }) : super(key: key);
+  });
 
   /// Widget to receive the [CameraController].
   final Widget Function(BuildContext, CameraController) builder;
@@ -161,7 +161,7 @@ class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserv
   Future<void> _stopCamera({bool updateState = true}) async {
     _cameraControllerCompleter.future
         .then((value) async {
-          CameraController? currentCameraController = _cameraController;
+          final CameraController? currentCameraController = _cameraController;
           if (currentCameraController != null) {
             _cameraController = null;
             if (currentCameraController.value.isInitialized && currentCameraController.value.isStreamingImages) {
@@ -172,7 +172,7 @@ class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserv
             if (activeCameras <= 0) {
               currentCameraController.dispose();
               while (disposableControllers.isNotEmpty) {
-                var controller = disposableControllers.removeAt(0);
+                final controller = disposableControllers.removeAt(0);
                 controller.dispose();
               }
             } else {

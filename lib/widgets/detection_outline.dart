@@ -35,6 +35,19 @@ extension DetectionLabelPositionX on DetectionLabelPosition {
 
 /// Configuration for detection outlines.
 class DetectionOutlineConfig {
+  DetectionOutlineConfig({
+    this.padding = 10,
+    this.margin = 5,
+    this.outlineWidth = 2,
+    this.cornerRadius = 5,
+    this.activeOutlineColor = Colors.green,
+    this.inactiveOutlineColor = const Color.fromRGBO(255, 255, 255, 0.2),
+    this.enableLabel = true,
+    this.labelPosition = DetectionLabelPosition.bottomLeft,
+    this.labelColor = Colors.white,
+    this.labelSize = 12,
+  });
+
   /// Inner spacing between the actual detection and the displayed outline.
   /// Defaults to `10`.
   final double padding;
@@ -69,23 +82,17 @@ class DetectionOutlineConfig {
 
   /// Font size of the displayed label. Defaults to `12`.
   final double labelSize;
-
-  DetectionOutlineConfig({
-    this.padding = 10,
-    this.margin = 5,
-    this.outlineWidth = 2,
-    this.cornerRadius = 5,
-    this.activeOutlineColor = Colors.green,
-    this.inactiveOutlineColor = const Color.fromRGBO(255, 255, 255, 0.2),
-    this.enableLabel = true,
-    this.labelPosition = DetectionLabelPosition.bottomLeft,
-    this.labelColor = Colors.white,
-    this.labelSize = 12,
-  });
 }
 
 /// Configures rendering of detection boxes.
 class DetectionOutline extends StatelessWidget {
+  const DetectionOutline({
+    super.key,
+    required this.boundingBoxes,
+    required this.detectionAreaBoundingBox,
+    required this.outlineConfig,
+  });
+
   /// Locations and sizes of the detection boxes, paired with their value.
   final Map<Rect, String> boundingBoxes;
 
@@ -94,8 +101,6 @@ class DetectionOutline extends StatelessWidget {
 
   /// Configuration values for rendering detection outlines.
   final DetectionOutlineConfig outlineConfig;
-
-  DetectionOutline({required this.boundingBoxes, required this.detectionAreaBoundingBox, required this.outlineConfig});
 
   @override
   Widget build(BuildContext context) => CustomPaint(
@@ -109,6 +114,16 @@ class DetectionOutline extends StatelessWidget {
 
 /// Paints detection boxes on screen.
 class _DetectionOutlinePainter extends CustomPainter {
+  _DetectionOutlinePainter({
+    required this.boundingBoxes,
+    required this.detectionAreaBoundingBox,
+    required this.outlineConfig,
+  }) {
+    _paint
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = outlineConfig.outlineWidth;
+  }
+
   /// Configuration values for rendering detection outlines.
   final DetectionOutlineConfig outlineConfig;
 
@@ -120,16 +135,6 @@ class _DetectionOutlinePainter extends CustomPainter {
 
   /// Base configuration for debugging border styling.
   final Paint _paint = Paint();
-
-  _DetectionOutlinePainter({
-    required this.boundingBoxes,
-    required this.detectionAreaBoundingBox,
-    required this.outlineConfig,
-  }) {
-    _paint
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = outlineConfig.outlineWidth;
-  }
 
   /// Checks whether [boundingBox] is within the [detectionAreaBoundingBox].
   bool _isInDetectionArea(Rect boundingBox) =>

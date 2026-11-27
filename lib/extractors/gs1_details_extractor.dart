@@ -7,6 +7,10 @@ enum GS1Type { giai, unknown }
 
 /// Extracts details of GS1 codes.
 class GS1DetailsExtractor implements Extractor<GS1Details> {
+  GS1DetailsExtractor({GS1ValidatorService? gs1ValidatorService, GS1DetailsService? gs1DetailsService})
+    : _gs1ValidatorService = gs1ValidatorService ?? GS1ValidatorService(),
+      _gs1DetailsService = gs1DetailsService ?? GS1DetailsService();
+
   /// The [GS1ValidatorService] to be used.
   final GS1ValidatorService _gs1ValidatorService;
 
@@ -14,10 +18,6 @@ class GS1DetailsExtractor implements Extractor<GS1Details> {
   final GS1DetailsService _gs1DetailsService;
 
   final RegExp _everythingExceptDigits = RegExp(r'\D');
-
-  GS1DetailsExtractor({GS1ValidatorService? gs1ValidatorService, GS1DetailsService? gs1DetailsService})
-    : _gs1ValidatorService = gs1ValidatorService ?? GS1ValidatorService(),
-      _gs1DetailsService = gs1DetailsService ?? GS1DetailsService();
 
   /// Extracts an gs1 code from [input] and splits it up into its
   /// [GS1Details] Returns `null` if [input] is `null` or if the resulting gs1

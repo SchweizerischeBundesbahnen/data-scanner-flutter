@@ -13,10 +13,6 @@ class TextRecognitionVisionProcessor implements VisionProcessor {
     final input = image.toInputImage(rotation: imageRotation);
     final value = await _scanner.processImage(input);
 
-    return Map.fromIterable(
-      value.blocks.expand((block) => block.lines),
-      key: (line) => line.boundingBox,
-      value: (line) => line.text,
-    );
+    return {for (final line in value.blocks.expand((block) => block.lines)) line.boundingBox: line.text};
   }
 }

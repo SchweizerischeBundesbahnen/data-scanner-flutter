@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 
 /// Sized and scaled [CameraPreview] wrapper.
 class SizedCameraPreview<T> extends StatefulWidget {
+  const SizedCameraPreview({super.key, required this.size, required this.cameraController});
+
   /// Size of the clipped preview.
   final Size size;
 
   /// Controls the device cameras.
   final CameraController cameraController;
 
-  const SizedCameraPreview({Key? key, required this.size, required this.cameraController}) : super(key: key);
-
   @override
-  _SizedCameraPreviewState createState() => _SizedCameraPreviewState<T>();
+  State<SizedCameraPreview<T>> createState() => _SizedCameraPreviewState<T>();
 }
 
-class _SizedCameraPreviewState<T> extends State<SizedCameraPreview> {
+class _SizedCameraPreviewState<T> extends State<SizedCameraPreview<T>> {
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context);
