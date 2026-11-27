@@ -7,13 +7,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 
 extension CameraImageX on CameraImage {
   InputImage toInputImage({int rotation = 0}) {
-    final WriteBuffer allBytes = WriteBuffer();
-
-    for (final Plane plane in planes) {
-      allBytes.putUint8List(plane.bytes);
-    }
-
-    final bytes = Platform.isAndroid ? getNv21Uint8List() : allBytes.done().buffer.asUint8List();
+    final bytes = Platform.isAndroid ? getNv21Uint8List() : _concatenatePlanes();
 
     final Size imageSize = Size(width.toDouble(), height.toDouble());
 
@@ -44,7 +38,7 @@ extension CameraImageX on CameraImage {
     final vBuffer = vPlane.bytes;
 
     final numPixels = (width * height * 1.5).toInt();
-    final nv21 = List<int>.filled(numPixels, 0);
+    final nv21 = Uint8List(numPixels);
 
     // Full size Y channel and quarter size U+V channels.
     int idY = 0;
@@ -77,6 +71,16 @@ extension CameraImageX on CameraImage {
         }
       }
     }
-    return Uint8List.fromList(nv21);
+    return nv21;
+  }
+
+  Uint8List _concatenatePlanes() {
+    final WriteBuffer allBytes = WriteBuffer();
+
+    for (final Plane plane in planes) {
+      allBytes.putUint8List(plane.bytes);
+    }
+
+    return allBytes.done().buffer.asUint8List();
   }
 }
