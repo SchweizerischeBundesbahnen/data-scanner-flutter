@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 
 /// Creates a cutout hole.
 class HolePainter extends CustomPainter {
+  HolePainter({
+    required this.rect,
+    this.radius = 12,
+    this.overlayColor = Colors.black,
+    this.overlayColorOpacity = 0.75,
+    this.borderColor = Colors.white,
+    this.borderColorOpacity = 0.75,
+    this.borderWidth = 1,
+  });
+
   /// Position and size of the cutout hole.
   final Rect rect;
 
@@ -22,16 +32,6 @@ class HolePainter extends CustomPainter {
 
   /// Width of the cutout hole border. Defaults to `1`.
   final double borderWidth;
-
-  HolePainter({
-    required this.rect,
-    this.radius = 12,
-    this.overlayColor = Colors.black,
-    this.overlayColorOpacity = 0.75,
-    this.borderColor = Colors.white,
-    this.borderColorOpacity = 0.75,
-    this.borderWidth = 1,
-  });
 
   @override
   void paint(Canvas canvas, Size size) {

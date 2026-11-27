@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 /// Contains a string localized in German, French and Italian.
 class LocalizedString {
+  LocalizedString({required this.de, required this.fr, required this.it, required this.en});
+
   /// The German localization.
   final String de;
 
@@ -14,21 +16,19 @@ class LocalizedString {
   /// The English localization.
   final String en;
 
-  LocalizedString({required this.de, required this.fr, required this.it, required this.en});
-
   /// Value corresponsing to the current language (`de`,`fr`,`it`) of [context].
   /// Requires a [Localizations] widget in scope. Returns the German value when
   /// no language matches [context].
   String of(BuildContext context) {
     switch (Localizations.localeOf(context).languageCode) {
       case 'de':
-        return this.de;
+        return de;
       case 'fr':
-        return this.fr;
+        return fr;
       case 'it':
-        return this.it;
+        return it;
       default:
-        return this.de;
+        return de;
     }
   }
 

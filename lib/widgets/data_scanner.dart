@@ -19,6 +19,27 @@ enum DetectionAreaMode { containsRect, containsHorizontally, containsVertically,
 
 /// Holds the configuration for a [DataScanner].
 class DataScannerConfiguration<T> {
+  DataScannerConfiguration({
+    required this.processors,
+    required this.extractors,
+    this.onExtracted,
+    this.onPermissionDenied,
+    this.onError,
+    this.onZoomChanged,
+    this.enableZoom = false,
+    this.detectionAreaHeight = 64,
+    this.detectionAreaWidth,
+    this.detectionAreaMode = DetectionAreaMode.containsRect,
+    this.upperHelper,
+    this.lowerHelper,
+    this.showOverlay = true,
+    this.showTorchToggle = false,
+    this.torchToggleAlignment = Alignment.bottomCenter,
+    this.torchToggleMargin = const EdgeInsets.all(32),
+    this.detectionOutline,
+    RouteObserver<ModalRoute>? routeObserver,
+  }) : _routeObserver = routeObserver ?? RouteObserver();
+
   /// [VisionProcessor]s to be used.
   final List<VisionProcessor> processors;
 
@@ -80,41 +101,20 @@ class DataScannerConfiguration<T> {
   /// Configuration for displaying outlines around detected visuals. If nothing
   /// is set, no outlines will be displayed.
   final DetectionOutlineConfig? detectionOutline;
-
-  DataScannerConfiguration({
-    required this.processors,
-    required this.extractors,
-    this.onExtracted,
-    this.onPermissionDenied,
-    this.onError,
-    this.onZoomChanged,
-    this.enableZoom = false,
-    this.detectionAreaHeight = 64,
-    this.detectionAreaWidth,
-    this.detectionAreaMode = DetectionAreaMode.containsRect,
-    this.upperHelper,
-    this.lowerHelper,
-    this.showOverlay = true,
-    this.showTorchToggle = false,
-    this.torchToggleAlignment = Alignment.bottomCenter,
-    this.torchToggleMargin = const EdgeInsets.all(32),
-    this.detectionOutline,
-    RouteObserver<ModalRoute>? routeObserver,
-  }) : _routeObserver = routeObserver ?? RouteObserver();
 }
 
 /// Displays a [CameraPreview] and detects content as configured in [scannerConfiguration].
 class DataScanner<T> extends StatefulWidget {
+  const DataScanner({super.key, required this.scannerConfiguration});
+
   /// Configuration which the [DataScanner] should use.
   final DataScannerConfiguration<T> scannerConfiguration;
 
-  const DataScanner({Key? key, required this.scannerConfiguration}) : super(key: key);
-
   @override
-  _DataScannerState createState() => _DataScannerState<T>(scannerConfiguration: scannerConfiguration);
+  State<DataScanner<T>> createState() => _DataScannerState<T>();
 }
 
-class _DataScannerState<T> extends State<DataScanner> with RouteAware {
+class _DataScannerState<T> extends State<DataScanner<T>> with RouteAware {
   /// Whether detection is still in progress and should be skipped in the next
   /// frame.
   bool _isDetecting = false;
@@ -137,7 +137,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
   Orientation? _previousOrientation;
 
   /// Configuration for the [DataScanner].
-  final DataScannerConfiguration<T> scannerConfiguration;
+  DataScannerConfiguration<T> get scannerConfiguration => widget.scannerConfiguration;
 
   /// Default margin for the detection area if no width is set.
   final _defaultDetectionAreaMargin = 32;
@@ -145,14 +145,30 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
   // ValueNotifier for the zoom level.
   final ValueNotifier<double> _zoomNotifier = ValueNotifier<double>(1.0);
 
-  _DataScannerState({required this.scannerConfiguration});
-
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       scannerConfiguration._routeObserver.subscribe(this, ModalRoute.of(context)!);
     });
-    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(DataScanner<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldObserver = oldWidget.scannerConfiguration._routeObserver;
+    if (oldObserver != scannerConfiguration._routeObserver) {
+      oldObserver.unsubscribe(this);
+      scannerConfiguration._routeObserver.subscribe(this, ModalRoute.of(context)!);
+    }
+  }
+
+  @override
+  void dispose() {
+    scannerConfiguration._routeObserver.unsubscribe(this);
+    _zoomNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -207,13 +223,13 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
 
     final rotation = orientationDegrees[nativeOrientation]!;
 
-    Map<Rect, String?> boundingBoxes = {};
+    final Map<Rect, String?> boundingBoxes = {};
 
     for (final processor in scannerConfiguration.processors) {
       boundingBoxes.addAll(await processor.getBoundingBoxes(image: image, imageRotation: rotation));
     }
 
-    Map<Rect, T?> detectedElements = {};
+    final Map<Rect, T?> detectedElements = {};
 
     for (final extractor in scannerConfiguration.extractors) {
       detectedElements.addAll(boundingBoxes.map((key, value) => MapEntry(key, extractor.extract(value))));
@@ -221,10 +237,10 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
 
     detectedElements.removeWhere((key, value) => value == null);
 
-    Map<Rect, T> extractedElements = detectedElements.map((key, value) => MapEntry(key, value!));
+    final Map<Rect, T> extractedElements = detectedElements.map((key, value) => MapEntry(key, value as T));
 
     // Make absolutely sure the scanner is still active before accessing context
-    if (_paused) return;
+    if (_paused || !context.mounted) return;
 
     Size orientedImageSize;
 
@@ -280,7 +296,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
     translatedElements.removeWhere((key, value) => !_isWithinArea(detectionAreaBounds, key));
 
     if (translatedElements.isNotEmpty) {
-      final result = translatedElements[translatedElements.keys.first]!;
+      final result = translatedElements[translatedElements.keys.first] as T;
       if (result.toString() != _previousResult.toString()) {
         scannerConfiguration.onExtracted?.call(result);
         _previousResult = result.toString();
@@ -323,7 +339,7 @@ class _DataScannerState<T> extends State<DataScanner> with RouteAware {
             cappedHeight = constraints.maxHeight != double.infinity ? constraints.maxHeight : (cappedWidth / 16) * 9;
           }
 
-          Size cappedSize = Size(cappedWidth, cappedHeight);
+          final Size cappedSize = Size(cappedWidth, cappedHeight);
 
           SchedulerBinding.instance.addPostFrameCallback(
             (_) => setState(() {

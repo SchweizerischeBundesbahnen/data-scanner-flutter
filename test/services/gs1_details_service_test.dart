@@ -15,17 +15,19 @@ void main() {
       test('should return [] for gs1 codes with unknown type', () async {
         final testValues = ['(9999)761329948010399', '9999761329948010399', '123', 'ABCDEF', ''];
 
-        testValues.forEach((testValue) => expect(service.extractGS1Values(testValue, GS1Type.unknown), []));
+        for (final testValue in testValues) {
+          expect(service.extractGS1Values(testValue, GS1Type.unknown), []);
+        }
       });
 
       test('should return filled List<GS1Description> for giai codes', () async {
         final testValues = ['8004761329948010399', '(8004)761329948010399'];
 
-        testValues.forEach((testValue) {
+        for (final testValue in testValues) {
           final results = service.extractGS1Values(testValue, GS1Type.giai);
           expect(results, isA<List<GS1Description>>());
-          expect(results.length > 0, isTrue);
-        });
+          expect(results.isNotEmpty, isTrue);
+        }
       });
     });
 
@@ -36,10 +38,10 @@ void main() {
         // (0000)0...
         final format = RegExp(r'\(\d\d\d\d\)\d+');
 
-        testValues.forEach((testValue) {
+        for (final testValue in testValues) {
           final result = service.formatGS1(testValue, type: GS1Type.giai);
           expect(format.hasMatch(result), isTrue);
-        });
+        }
       });
     });
   });

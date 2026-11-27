@@ -56,6 +56,11 @@ void main() {
       expect(nv21.sublist(0, 16).every((e) => e == 100), true); // Y plane
     });
 
+    test('getNv21Uint8List interleaves V and U after the Y plane', () {
+      final nv21 = mockImage.getNv21Uint8List();
+      expect(nv21.sublist(16), [200, 150, 200, 150, 200, 150, 200, 150]);
+    });
+
     test('toInputImage returns InputImage with correct metadata', () {
       final image = mockImage.toInputImage(rotation: 0);
       expect(image.metadata?.size, const Size(4, 4));

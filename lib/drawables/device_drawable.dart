@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 /// Draws an icon representing a mobile phone.
 class DeviceLogoDrawable extends StatelessWidget {
+  const DeviceLogoDrawable({super.key, this.width = 28, this.height = 50, this.color = Colors.white});
+
   /// Width of the device icon. Defaults to `28`.
   final double width;
 
@@ -11,8 +13,6 @@ class DeviceLogoDrawable extends StatelessWidget {
   /// Stroke color of the device icon. Defaults to [Colors.white].
   final Color color;
 
-  const DeviceLogoDrawable({Key? key, this.width = 28, this.height = 50, this.color = Colors.white}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return CustomPaint(size: Size(width, height), painter: _RPSCustomPainter(color));
@@ -21,14 +21,14 @@ class DeviceLogoDrawable extends StatelessWidget {
 
 /// This custom painter was generated with https://fluttershapemaker.com/
 class _RPSCustomPainter extends CustomPainter {
+  _RPSCustomPainter(this.color);
+
   /// Stroke color to be used when drawing.
   final Color color;
 
-  _RPSCustomPainter(this.color);
-
   @override
   void paint(Canvas canvas, Size size) {
-    Path path_0 = Path();
+    final Path path_0 = Path();
     path_0.moveTo(size.width * 0.2848974, size.height * 0.08969378);
     path_0.lineTo(size.width * 0.7122479, size.height * 0.08969378);
     path_0.moveTo(size.width * 0.01780342, size.height * 0.08963636);
@@ -70,7 +70,7 @@ class _RPSCustomPainter extends CustomPainter {
     );
     path_0.close();
 
-    Paint paintStroke = Paint()
+    final Paint paintStroke = Paint()
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 
