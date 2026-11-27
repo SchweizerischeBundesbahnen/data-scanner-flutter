@@ -18,7 +18,7 @@ dependencies:
   sbb_design_system_mobile: ^4.13.1
 
   # https://pub.dev/packages/cupertino_icons
-  cupertino_icons: ^1.0.9
+  cupertino_icons: ^2.0.0
 
 dev_dependencies:
   flutter_test:
