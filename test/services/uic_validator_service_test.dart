@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sbb_data_scanner/services/uic_validation_service.dart';
 
-class MockLuhn extends Mock implements Luhn {}
+class MockLuhn extends Mock implements Luhn;
 
 void main() {
   group('UICValidatorService', () {

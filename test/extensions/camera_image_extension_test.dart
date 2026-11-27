@@ -7,9 +7,9 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:mocktail/mocktail.dart';
 import 'package:sbb_data_scanner/extensions/_extensions.dart';
 
-class MockPlane extends Mock implements Plane {}
+class MockPlane extends Mock implements Plane;
 
-class MockCameraImage extends Mock implements CameraImage {}
+class MockCameraImage extends Mock implements CameraImage;
 
 class FakeImageFormat extends Fake implements ImageFormat {
   @override
