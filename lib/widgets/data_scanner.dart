@@ -147,10 +147,28 @@ class _DataScannerState<T> extends State<DataScanner<T>> with RouteAware {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       scannerConfiguration._routeObserver.subscribe(this, ModalRoute.of(context)!);
     });
-    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(DataScanner<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldObserver = oldWidget.scannerConfiguration._routeObserver;
+    if (oldObserver != scannerConfiguration._routeObserver) {
+      oldObserver.unsubscribe(this);
+      scannerConfiguration._routeObserver.subscribe(this, ModalRoute.of(context)!);
+    }
+  }
+
+  @override
+  void dispose() {
+    scannerConfiguration._routeObserver.unsubscribe(this);
+    _zoomNotifier.dispose();
+    super.dispose();
   }
 
   @override
