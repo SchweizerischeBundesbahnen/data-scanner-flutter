@@ -29,3 +29,5 @@ dev_dependencies:
 
   # https://pub.dev/packages/mocktail
   mocktail: ^1.0.5
+  # https://pub.dev/packages/flutter_lints
+  flutter_lints: ^6.0.0
