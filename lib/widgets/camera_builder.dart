@@ -94,7 +94,13 @@ class _CameraBuilderState extends State<CameraBuilder> with WidgetsBindingObserv
     }
 
     // create and setup new camera instance
-    final CameraDescription description = await CameraService.getCamera(CameraLensDirection.back);
+    CameraDescription description;
+    try {
+      description = await CameraService.getCameraWithPreferredDirection(CameraLensDirection.back);
+    } on CameraException catch (e) {
+      if (widget.onError != null) widget.onError!('${e.code}: ${e.description}');
+      return;
+    }
 
     final cameraController = CameraController(description, ResolutionPreset.high, enableAudio: false);
 

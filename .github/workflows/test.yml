@@ -26,7 +26,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.35.x
+          flutter-version: 3.44.x
           cache: true
 
       - name: flutter setup
@@ -49,14 +49,22 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: axel-op/dart-package-analyzer@v3
+      - uses: subosito/flutter-action@v2
         id: analysis
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          channel: stable
+          flutter-version: 3.44.x
+          cache: true
+
+      - name: Install pana
+        run: dart pub global activate pana
+
+      - name: Run pana
+        run: dart pub global run pana --no-warning . | tee -a "$GITHUB_STEP_SUMMARY"
 
   build-examples:
     needs: [ validation ]
     uses: ./.github/workflows/example_app_build.yml
     with:
-      flutter_sdks: '["3.35.x", "3.41.x"]'
+      flutter_sdks: '["3.44.x", "3.47.x"]'
 
